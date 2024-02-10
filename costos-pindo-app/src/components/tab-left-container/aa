@@ -1,0 +1,60 @@
+  <div>
+        <div className="tab-content">
+          <div className="tab-pane active show" id="tabs-rodales-ex1">
+
+            {// Agreggo el search aca 
+            }
+            <SearchInput onChangeBuscar={onChangeBuscarRodales}></SearchInput>
+            <div className="hr-text unset-margin mb-4"></div>
+
+            <div className='items-list-item'>
+
+              <div className="list-group list-group-flush" id='rodales_items'>
+
+                {statusRodales ?
+
+                  <ItemsBoxRodalesContainer rodales={rodales} status={statusRodales}
+                  ></ItemsBoxRodalesContainer>
+
+                  : <TabLeftPlaceHolder></TabLeftPlaceHolder>
+                }
+
+              </div>
+            </div>
+            <div className="hr-text unset-margin mb-4"></div>
+          </div>
+
+          <div className="tab-pane" id="tabs-empresas-ex2">
+
+            {// Agreggo el search de empresas
+            }
+
+            <SearchInput onChangeBuscar={onChangeBuscarEmpresas}></SearchInput>
+            <div className="hr-text unset-margin mb-4"></div>
+
+            <div className='items-list-item'>
+
+              <div className="list-group list-group-flush" id='rodales_items'>
+
+                <ItemsBoxEmpresasContainer empresas={empresas} status={statusEmpresas}
+                  rodales={rodales}
+                  rodalesDinamic={rodalesDinamic}
+                  statusRodales={statusRodales}
+                  setRodales={setRodales}
+                  setRodalesActually={setRodalesActually}
+                >
+
+                </ItemsBoxEmpresasContainer>
+
+
+              </div>
+            </div>
+
+            <div className="hr-text unset-margin mb-5"></div>
+
+
+          </div>
+        </div>
+      </div>
+
+      <ItemsSelectedTOC empresas={empresas} reloadToc={reloadToc}></ItemsSelectedTOC>

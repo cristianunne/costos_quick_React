@@ -3,9 +3,6 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,56 +10,139 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+body{
+  margin: 0px;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+body::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+body::-webkit-scrollbar-track {
+  background: #3055ac;        /* color of the tracking area */
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+body::-webkit-scrollbar-thumb {
+  background-color: 121f3d;    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: 3px solid #3055ac;  /* creates padding around scroll thumb */
+}
+
+
+#container{
+  flex: 1;
+  padding-right: 0;
+  padding-left: 0;
+}
+#row-container{
+  margin-left: 0;
+  margin-right: 0;
+}
+
+#left-container{
+  height: 100vh;
+  background-color: white;
+}
+
+#main-container{
+  height: 100vh;
+  background-color: #f0f8ff00;
+}
+#left-container{
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.tabs-container{
+  height: 60vh;
+  max-height: 60vh;
+}
+
+.tab-content{
+ 
+  flex: 0.6;
+  background-color: #182433;
+ 
+}
+.tabs-header{
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.tabs-header::-webkit-scrollbar {
+  height: 10px;               /* width of the entire scrollbar */
+}
+
+.tabs-header::-webkit-scrollbar-track {
+  background: #ffffff;        /* color of the tracking area */
+}
+
+.tabs-header::-webkit-scrollbar-thumb {
+  background-color: #3055ac;    /* color of the scroll thumb */
+  border-radius:4px;       /* roundness of the scroll thumb */
+  border: 1px solid #3055ac;  /* creates padding around scroll thumb */
+}
+
+.tabs-item{
+  background-color: #24385b;
+  color: #ffffff !important;
+}
+.tabs-item > a{
+  color: #ffffff !important;
+}
+.tabs-item:hover{
+  background-color: #3055ac;
+}
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
+  background-color: #3055ac;
+}
+
+.tab-pane{
+  padding: 0px;
+  background-color: white;
+
+}
+
+.item-list{
+  background-color: #3055ac;
+}
+
+.items-list-item{
+  margin-top: 5px;
+}
+
+.item-layer{
+  padding: 5px !important;
+  color: #ffffff;
   cursor: pointer;
-  transition: border-color 0.25s;
+  border: #143e72 solid 1px;
 }
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.item-layer:hover{
+  background-color: #4263eb !important;
+  color: #ffffff !important;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+#rodales_items{
+  height: 100%;
+  overflow-y: auto;
+}
+
+.items-list-item{
+  height: 50vh;
+  overflow-y: auto;
+}
+
+#rodales_items::-webkit-scrollbar {
+  width: 10px;               /* width of the entire scrollbar */
+}
+
+#rodales_items::-webkit-scrollbar-track {
+  background: #182433;        /* color of the tracking area */
+}
+
+#rodales_items::-webkit-scrollbar-thumb {
+  background-color: #3055ac;    /* color of the scroll thumb */
+  border-radius: 4px;       /* roundness of the scroll thumb */
+  border: 1px solid #3055ac;  /* creates padding around scroll thumb */
 }

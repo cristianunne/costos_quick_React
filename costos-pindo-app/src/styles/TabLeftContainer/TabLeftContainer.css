@@ -1,0 +1,87 @@
+
+
+.unset-margin{
+    margin: unset;
+}
+
+.item-li-active{
+    background-color: #151f2c;
+}
+
+#sub-tableft-container{
+    height: 100%;
+    position: relative;
+    padding-left: 0px;
+    padding-right: 0px;
+    background-color: #151f2c;
+}
+
+.tab-nav-header{
+    position: inherit;
+    height: 6%;
+}
+
+.tab-content-container{
+    position: inherit;
+    height: 60%;
+    max-height: 60%;
+    overflow-y: hidden;
+}
+
+.tab-selected-container{
+    position: inherit;
+    height: 34%;
+    max-height: 36%;
+    overflow-y: hidden;
+    padding-top: 10px;
+}
+
+#items-container-TOC{
+    height: 33vh;
+
+}
+
+#toc-sub-container{
+    height: 100%;
+    overflow-y: auto;
+}
+
+#title-selection-section{
+    margin-left: 3px;
+    margin-right: 3px;
+    margin-bottom: 5px;
+    background-color: #121f3d;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+#title-selection-section > h3 {
+    margin: 0;
+}
+
+.text-item-content {
+    flex: 0.9;
+    line-height: 130%;
+    font-size: 0.9rem;
+}
+.number-item-content {
+    flex: 0.1;
+    text-align: center;
+    line-height: 130%;
+    font-size: 0.9rem;
+}
+
+.dropdown-item:hover{
+    background-color: #206bc4 !important;
+    color: #ffffff !important;
+}
+
+.border-collapse{
+    border: solid 1px #206bc4;
+}
+.item-list {
+    padding: 0px !important;
+}
+.icon-subitem{
+    cursor: pointer;
+}
