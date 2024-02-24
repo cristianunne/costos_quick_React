@@ -4,9 +4,10 @@ import ItemAcordionSelected from './ItemAcordionSelected'
 import { ItemsGlobalContext } from '../../context/GlobalContext'
 
 
-const AcordionBoxContainer = ({ cod_emp, name_empresa, rodal }) => {
+const AcordionBoxContainer = ({ cod_emp, name_empresa, rodal, reload }) => {
 
-    const { itemsSelected, setItemsSelected } = useContext(ItemsGlobalContext);
+    const { itemsSelected, setItemsSelected, reloadSelected, setReloadSelected,
+        empresasSelected, setEmpresasSelected } = useContext(ItemsGlobalContext);
 
     const [items, setItems] = useState([]);
 
@@ -16,6 +17,7 @@ const AcordionBoxContainer = ({ cod_emp, name_empresa, rodal }) => {
 
         itemsSelected.forEach((element, index) => {
 
+        
             if(element.idempresa == cod_emp){
                 items_.push(<ItemAcordionSelected name_rodal={element.rodal} item={element} key={index}></ItemAcordionSelected>);
             }
@@ -30,8 +32,9 @@ const AcordionBoxContainer = ({ cod_emp, name_empresa, rodal }) => {
     useEffect(() => {
 
         createItems();
+      
 
-    }, [itemsSelected]);
+    }, [reload]);
 
     return (
 

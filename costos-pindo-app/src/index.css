@@ -87,6 +87,7 @@ body::-webkit-scrollbar-thumb {
 .tabs-item{
   background-color: #24385b;
   color: #ffffff !important;
+
 }
 .tabs-item > a{
   color: #ffffff !important;

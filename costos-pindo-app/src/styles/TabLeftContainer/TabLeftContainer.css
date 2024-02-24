@@ -13,7 +13,7 @@
     position: relative;
     padding-left: 0px;
     padding-right: 0px;
-    background-color: #151f2c;
+    background-color: #182433;
 }
 
 .tab-nav-header{
@@ -84,4 +84,18 @@
 }
 .icon-subitem{
     cursor: pointer;
+}
+
+
+.placeholder:not(.btn):not([class*=bg-]){
+    background-color: #206bc4 !important;
+}
+
+.btn-hover:hover{
+    background-color: #4263eb;
+}
+
+.nav-link {
+    padding-left: 8px;
+    padding-right: 8px;
 }

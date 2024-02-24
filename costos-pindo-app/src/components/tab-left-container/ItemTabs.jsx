@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { ICONOS } from '../../Iconos';
 import RodalesIcon from '../../icons/RodalesIcon';
 import EmpresasIcon from '../../icons/EmpresasIcon';
+import MaterialesIcon from '../../icons/MaterialesIcon';
 
 const ItemTabs = ({ icono, title, url, active_status }) => {
 
@@ -27,6 +28,7 @@ const ItemTabs = ({ icono, title, url, active_status }) => {
                 <a href={'#' + url} className={`nav-link  ${active_status ? 'active' : null}`} data-bs-toggle="tab">
                 {icono == ICONOS.RODALES ? <RodalesIcon/> : null}
                 {icono == ICONOS.EMPRESAS ? <EmpresasIcon/> : null}
+                {icono == ICONOS.MATERIALES ? <MaterialesIcon/> : null}
                     {title}
                 </a>
             </li>

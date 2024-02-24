@@ -2,7 +2,7 @@
 export const ICONOS = {
 
     RODALES: 'Rodales',
-
-    EMPRESAS: 'Empresas'
+    EMPRESAS: 'Empresas',
+    MATERIALES : 'Materiales'
 
 }

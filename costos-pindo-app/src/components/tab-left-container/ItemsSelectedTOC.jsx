@@ -7,6 +7,7 @@ import { ItemsGlobalContext } from '../../context/GlobalContext';
 const ItemsSelectedTOC = ({ empresas, reloadToc }) => {
 
     const [listItems, setListItems] = useState();
+    const [reload, setReload] = useState(false);
 
     const { itemsSelected, setItemsSelected, reloadSelected, setReloadSelected,
         empresasSelected, setEmpresasSelected } = useContext(ItemsGlobalContext);
@@ -24,7 +25,7 @@ const ItemsSelectedTOC = ({ empresas, reloadToc }) => {
                 if (value.toString() == ele.idempresa.toString()) {
                     items_.push(<AcordionBoxContainer cod_emp={value} name_empresa={ele.nombre} 
                         
-                        key={index}></AcordionBoxContainer>);
+                        key={index} reload={reload}></AcordionBoxContainer>);
                 }
 
             });
@@ -33,17 +34,16 @@ const ItemsSelectedTOC = ({ empresas, reloadToc }) => {
         });
 
         setListItems(items_);
+        setReload(!reload);
 
     }
 
     useEffect(() => {
 
         createItemsAcordion();
-        console.log('Items selected');
-        console.log(itemsSelected);
-
-
-    }, [reloadSelected, reloadToc])
+        console.log('Refresh item Selected TOC');
+        
+    }, [reloadSelected])
 
 
 

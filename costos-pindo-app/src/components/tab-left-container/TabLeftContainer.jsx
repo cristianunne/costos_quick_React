@@ -16,6 +16,7 @@ import ItemsSelectedTOC from './ItemsSelectedTOC'
 import TabLeftPlaceHolder from '../placeholders/TabLeftPlaceHolder'
 
 
+
 const TabLeftContainer = () => {
 
 
@@ -204,7 +205,7 @@ const TabLeftContainer = () => {
     //consulto por los estados
     //cargo los rodales a partir de las empresas
 
-    console.log('entretortort');
+    //console.log('entretortort');
 
     if (!statusRodales) {
 
@@ -234,6 +235,8 @@ const TabLeftContainer = () => {
         <ul className='nav nav-tabs card-header-tabs tabs-header bg-dark'>
           <ItemTabs icono={ICONOS.RODALES} title={'Rodales'} url={'tabs-rodales-ex1'} active_status={true} />
           <ItemTabs icono={ICONOS.EMPRESAS} title={'Empresas'} url={'tabs-empresas-ex2'} active_status={false} />
+          <ItemTabs icono={ICONOS.MATERIALES} title={'Materiales'} url={'tabs-materiales'} active_status={false} />
+
 
         </ul>
 
@@ -246,7 +249,7 @@ const TabLeftContainer = () => {
             {// Agreggo el search aca 
             }
             <SearchInput onChangeBuscar={onChangeBuscarRodales}></SearchInput>
-            <div className="hr-text unset-margin mb-4 bg-dark"></div>
+            <div className="hr-text unset-margin mb-4 bg-dark">Rodales</div>
 
             <div className='items-list-item bg-dark'>
 
@@ -271,7 +274,7 @@ const TabLeftContainer = () => {
             }
 
             <SearchInput onChangeBuscar={onChangeBuscarEmpresas}></SearchInput>
-            <div className="hr-text unset-margin mb-4"></div>
+            <div className="hr-text unset-margin mb-4">Empresas</div>
 
             <div className='items-list-item'>
 
@@ -292,6 +295,25 @@ const TabLeftContainer = () => {
             </div>
 
             <div className="hr-text unset-margin mb-5"></div>
+
+
+          </div>
+
+          <div className="tab-pane bg-dark" id="tabs-materiales">
+
+
+          <SearchInput onChangeBuscar={null}></SearchInput>
+          <div className="hr-text unset-margin mb-4">Materiales</div>
+
+          <div className='items-list-item'>
+
+            <div className="list-group list-group-flush bg-dark" id='rodales_items'>
+
+             
+            </div>
+          </div>
+
+          <div className="hr-text unset-margin mb-5"></div>
 
 
           </div>

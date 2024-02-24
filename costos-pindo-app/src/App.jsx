@@ -3,153 +3,149 @@ import { useEffect, useState } from 'react'
 import Empresas from './components/Empresas';
 import TabLeftContainer from './components/tab-left-container/TabLeftContainer';
 
-import { GlobalContext, ItemsGlobalContext } from './context/GlobalContext';
+import { GlobalContext, GlobalDataContext, ItemsGlobalContext, QueryGlobalContext } from './context/GlobalContext';
 
 import '../src/styles/DateHeader/dateheader.css'
+import '../src/styles/CostosContainer/CostosContainer.css'
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import YearsListContainer from './components/date-header/YearsListContainer';
+import { getYearsAPI } from './utility/Querys';
+import HeadersYearsPlaceholder from './components/placeholders/HeadersYearsPlaceholder';
+import MonthListContainer from './components/month-header/MonthListContainer';
+import CostosTableContainer from './components/costos/CostosTableContainer';
 
 
 
 function App() {
 
-  const [rodalReload, setRodalReload] = useState(false);
-  const [reloadEmpresa, setReloadEmpresa] = useState(false);
-  const [numberActive, setNumberActive] = useState(0);
+   const [rodalReload, setRodalReload] = useState(false);
+   const [reloadEmpresa, setReloadEmpresa] = useState(false);
+   const [numberActive, setNumberActive] = useState(0);
 
-  const [itemsSelected, setItemsSelected] = useState([]);
-  const [reloadSelected, setReloadSelected] = useState();
+   const [itemsSelected, setItemsSelected] = useState([]);
+   const [reloadSelected, setReloadSelected] = useState();
 
-  const [empresasSelected, setEmpresasSelected] = useState([]);
+   const [yearsSelected, setYearsSelected] = useState([]);
 
-  return (
-    <div className="page-wrapper">
+   //array utilizado para pintar los years presentes en la carga
+   const [yearsPresent, setYearsPresent] = useState([]);
+   const [isYearPresent, setIsYearPresent] = useState(false);
+   const [yearsOfRodalesFilter, setYearsOfRodalesFilter] = useState([]);
 
-      <div className="container" id="container">
+   const [monthsSelected, setMonthSelected] = useState([]);
+   const [monthsPresent, setMonthsPresent] = useState([]);
+   const [isMonthPresent, setIsMonthPresent] = useState([]);
 
-        <div className="row" id='row-container'>
-          <div className="col-lg-2" id='left-container'>
-            <GlobalContext.Provider value={{ rodalReload, setRodalReload, reloadEmpresa, setReloadEmpresa, numberActive, setNumberActive }}>
-              <ItemsGlobalContext.Provider value={{ itemsSelected, setItemsSelected, reloadSelected, setReloadSelected, empresasSelected, setEmpresasSelected }}>
-                <TabLeftContainer></TabLeftContainer>
-              </ItemsGlobalContext.Provider>
-            </GlobalContext.Provider>
+   const [empresasSelected, setEmpresasSelected] = useState([]);
 
-          </div>
-
-          <div className="col-lg-10" id='main-container'>
-            <div className="row pb-3 bg-dark">
-              <div className="col-xl-6 d-flex gap-1 years-container pt-3 pb-2">
-               
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35">
-                   2011
-                </a>
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35">
-                   2012
-                </a>
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35">
-                   2013
-                </a>
-
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35">
-                   2010
-                </a>
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35">
-                   2011
-                </a>
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35">
-                   2012
-                </a>
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35">
-                   2013
-                </a>
-
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35">
-                   2010
-                </a>
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35">
-                   2011
-                </a>
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35">
-                   2012
-                </a>
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35">
-                   2013
-                </a>
-               
+   const [yearsData, setYearsData] = useState([]);
+   const [yearsState, setYearsState] = useState(false);
 
 
-              </div>
-              <div className="col-xl-6 d-flex gap-1 month-container justify-content-end pt-3" >
+   //estados globales de los datos query
+   const [pages, setPages] = useState(0);
+   const [numberData, setNumberData] = useState(0);
+   const [dataCostos, setDataCostos] = useState([]);
+   const [isLoadingTcostos, setIsLoadingTcostos] = useState(false);
+   const [currentPageCostos, setCurrentPageCostos] = useState(1);
 
-              <a href="#" class="btn btn-outline-light btn-square btn-h-35 ps-2 pe-2 align-items-end">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-month" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M7 14h.013" /><path d="M10.01 14h.005" /><path d="M13.01 14h.005" /><path d="M16.015 14h.005" /><path d="M13.015 17h.005" /><path d="M7.01 17h.005" /><path d="M10.01 17h.005" /></svg>
-                   Ene
-                </a>
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35 ps-2 pe-2 align-items-end">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-month" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M7 14h.013" /><path d="M10.01 14h.005" /><path d="M13.01 14h.005" /><path d="M16.015 14h.005" /><path d="M13.015 17h.005" /><path d="M7.01 17h.005" /><path d="M10.01 17h.005" /></svg>
-                    Feb
-                </a>
+   const getYears = async () => {
 
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35 ps-2 pe-2 align-items-end">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-month" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M7 14h.013" /><path d="M10.01 14h.005" /><path d="M13.01 14h.005" /><path d="M16.015 14h.005" /><path d="M13.015 17h.005" /><path d="M7.01 17h.005" /><path d="M10.01 17h.005" /></svg>
-              
-                   Mar
-                </a>
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35 ps-2 pe-2 align-items-end">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-month" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M7 14h.013" /><path d="M10.01 14h.005" /><path d="M13.01 14h.005" /><path d="M16.015 14h.005" /><path d="M13.015 17h.005" /><path d="M7.01 17h.005" /><path d="M10.01 17h.005" /></svg>
-                    Abr
-                </a>
+      const years_result = await getYearsAPI();
 
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35 ps-2 pe-2 align-items-end">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-month" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M7 14h.013" /><path d="M10.01 14h.005" /><path d="M13.01 14h.005" /><path d="M16.015 14h.005" /><path d="M13.015 17h.005" /><path d="M7.01 17h.005" /><path d="M10.01 17h.005" /></svg>
-              
-                   May
-                </a>
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35 ps-2 pe-2 align-items-end">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-month" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M7 14h.013" /><path d="M10.01 14h.005" /><path d="M13.01 14h.005" /><path d="M16.015 14h.005" /><path d="M13.015 17h.005" /><path d="M7.01 17h.005" /><path d="M10.01 17h.005" /></svg>
-                    Jun
-                </a>
+      if (years_result) {
+         setYearsState(true);
+         setYearsData(years_result);
 
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35 ps-2 pe-2 align-items-end">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-month" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M7 14h.013" /><path d="M10.01 14h.005" /><path d="M13.01 14h.005" /><path d="M16.015 14h.005" /><path d="M13.015 17h.005" /><path d="M7.01 17h.005" /><path d="M10.01 17h.005" /></svg>
-              
-                   Jul
-                </a>
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35 ps-2 pe-2 align-items-end">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-month" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M7 14h.013" /><path d="M10.01 14h.005" /><path d="M13.01 14h.005" /><path d="M16.015 14h.005" /><path d="M13.015 17h.005" /><path d="M7.01 17h.005" /><path d="M10.01 17h.005" /></svg>
-                    Ago
-                </a>
+      }
 
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35 ps-2 pe-2 align-items-end">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-month" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M7 14h.013" /><path d="M10.01 14h.005" /><path d="M13.01 14h.005" /><path d="M16.015 14h.005" /><path d="M13.015 17h.005" /><path d="M7.01 17h.005" /><path d="M10.01 17h.005" /></svg>
-              
-                   Sep
-                </a>
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35 ps-2 pe-2 align-items-end">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-month" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M7 14h.013" /><path d="M10.01 14h.005" /><path d="M13.01 14h.005" /><path d="M16.015 14h.005" /><path d="M13.015 17h.005" /><path d="M7.01 17h.005" /><path d="M10.01 17h.005" /></svg>
-                    Oct
-                </a>
+   }
 
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35 ps-2 pe-2 align-items-end">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-month" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M7 14h.013" /><path d="M10.01 14h.005" /><path d="M13.01 14h.005" /><path d="M16.015 14h.005" /><path d="M13.015 17h.005" /><path d="M7.01 17h.005" /><path d="M10.01 17h.005" /></svg>
-              
-                   Nov
-                </a>
-                <a href="#" class="btn btn-outline-light btn-square btn-h-35 ps-2 pe-2 align-items-end">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-month" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M7 14h.013" /><path d="M10.01 14h.005" /><path d="M13.01 14h.005" /><path d="M16.015 14h.005" /><path d="M13.015 17h.005" /><path d="M7.01 17h.005" /><path d="M10.01 17h.005" /></svg>
-                    Dic
-                </a>
+
+   useEffect(() => {
+
+      if (!yearsState) {
+
+         getYears();
+
+      }
+
+   });
+
+   return (
+      <div className="page-wrapper">
+
+         <GlobalContext.Provider value={{ rodalReload, setRodalReload, reloadEmpresa, setReloadEmpresa, 
+            numberActive, setNumberActive }}>
+            <ItemsGlobalContext.Provider value={{
+               itemsSelected, setItemsSelected,
+               reloadSelected, setReloadSelected,
+               empresasSelected, setEmpresasSelected
+            }}>
+
+               <QueryGlobalContext.Provider value={{
+                  yearsSelected, setYearsSelected,
+                  yearsPresent, setYearsPresent,
+                  isYearPresent, setIsYearPresent,
+                  monthsSelected, setMonthSelected,
+                  monthsPresent, setMonthsPresent,
+                  isMonthPresent, setIsMonthPresent
+               }}>
+
+                  <GlobalDataContext.Provider value={{pages, setPages, 
+                  numberData, setNumberData, 
+                  dataCostos, setDataCostos, 
+                  isLoadingTcostos, setIsLoadingTcostos, 
+                  currentPageCostos, setCurrentPageCostos}}>
+
+                  <div className="container" id="container">
+
+                     <div className="row" id='row-container'>
+                        <div className="col-lg-2" id='left-container'>
+                           <TabLeftContainer></TabLeftContainer>
+
+                        </div>
+
+                        <div className="col-lg-10 d-flex flex-column" id='main-container'>
+                           <div className="row pb-3 bg-dark">
+
+                                 {!yearsState ? <HeadersYearsPlaceholder></HeadersYearsPlaceholder> :
+                                       <YearsListContainer years_data={yearsData}></YearsListContainer>}
+
+                                    <MonthListContainer></MonthListContainer>
+                           
+                           </div>
+
+                           <div className="row" id='costos-container'>
+                              <div className="col-lg-12">
+                                 <CostosTableContainer></CostosTableContainer>
+                              </div>
+
+                            
+
+                           </div>
+
+                        </div>
+
+                     </div>
+                  </div>
+
+                  </GlobalDataContext.Provider>
+
 
                 
+               </QueryGlobalContext.Provider >
+            </ItemsGlobalContext.Provider>
+         </GlobalContext.Provider>
 
-              </div>
-            </div>
-          </div>
+      
 
-        </div>
+         <ToastContainer />
+
       </div>
-
-    </div>
-  )
+   )
 }
 
 export default App

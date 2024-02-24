@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import ItemTabsRodalLi from './ItemTabsRodalLi'
 
+
+
 import { GlobalContext } from '../../context/GlobalContext';
 
 const ItemsBoxRodalesContainer = ({rodales, status}) => {
@@ -50,6 +52,7 @@ const ItemsBoxRodalesContainer = ({rodales, status}) => {
     return (
         <>
           {listItems}
+       
         </>
     )
 }

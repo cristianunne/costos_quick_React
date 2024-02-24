@@ -2,8 +2,8 @@ import React from 'react'
 
 const TabLeftPlaceHolder = () => {
     return (
-        <div className="card">
-                      <ul className="list-group list-group-flush placeholder-glow">
+        <div className="card bg-dark">
+                      <ul className="list-group list-group-flush placeholder-glow bg-dark">
                         <li className="list-group-item">
                           <div className="row align-items-center">
                             <div className="col-auto">
