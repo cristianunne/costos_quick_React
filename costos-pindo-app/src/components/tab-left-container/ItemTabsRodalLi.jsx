@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { GlobalContext, GlobalDataContext, ItemsGlobalContext, QueryGlobalContext } from '../../context/GlobalContext';
+import { GlobalContext, GlobalDataContext, ItemsGlobalContext, QueryGlobalContext, SelectedQueryGlobalContext } from '../../context/GlobalContext';
 import RodalesIcon from '../../icons/RodalesIcon';
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -25,10 +25,19 @@ const ItemTabsRodalLi = ({ name_rodal, idrodal, rodal }) => {
         monthsSelected, setMonthSelected, monthsPresent, setMonthsPresent,
         isMonthPresent, setIsMonthPresent } = useContext(QueryGlobalContext);
 
-        const { pages, setPages,
+    const { pages, setPages,
             numberData, setNumberData,
-            dataCostos, setDataCostos, isLoadingTcostos, setIsLoadingTcostos,
+            dataCostos, setDataCostos, 
+            dataCostosDinamic, setDataCostosDinamic,
+            isLoadingTcostos, setIsLoadingTcostos,
             currentPageAux, setCurrentPageAux } = useContext(GlobalDataContext);
+
+    
+    const { queryRodales, setQueryRodales,
+        queryYears, setQueryYears,
+        queryMonth, setQueryMonth,
+        queryMateriales, setQueryMateriales} = useContext(SelectedQueryGlobalContext);
+
 
     const getYearsByIdRodal = async (rodales) => {
 
@@ -88,13 +97,20 @@ const ItemTabsRodalLi = ({ name_rodal, idrodal, rodal }) => {
 
     const getMonthByRodales = async (rodales) => {
 
+
         const months_data = await getMonthsOfRodalesDataAPI(rodales);
+
+
+        let cantidad = 0;
+       
 
         if(months_data != null && months_data != false){
 
 
             let months_ = [];
             let new_months = [];
+
+            
 
 
             months_data.forEach(element => {
@@ -108,32 +124,49 @@ const ItemTabsRodalLi = ({ name_rodal, idrodal, rodal }) => {
 
                 } else {
 
-                    monthsPresent.forEach(month_el => {
+                    if(queryYears){
 
-                        let mes = parseInt(month_el);
-
-                        if (mes == element.month) {
-                            is_present = true;
-                        }
-
-                    });
-
-
-                    if (!is_present) {
                         months_.push(parseInt(element.month));
 
+                    } else {
+                        monthsPresent.forEach(month_el => {
+
+                            let mes = parseInt(month_el);
+    
+                            if (mes == element.month) {
+                                is_present = true;
+                            }
+    
+                        });
+    
+    
+                        if (!is_present) {
+                            months_.push(parseInt(element.month));
+    
+                        }
                     }
+
+                    
                 }
 
             });
 
-            new_months = [...monthsPresent, ...months_];
+         
+            if(queryYears){
+              
+                setMonthsPresent(months_);
+                setQueryYears(false);
+            } else {
 
-            setMonthsPresent(new_months);
-
+                
+                new_months = [...monthsPresent, ...months_];
+                setMonthsPresent(new_months);
+                
+            }
+            
+           
             setIsMonthPresent(!isMonthPresent);
-
-
+            
         }
       
        
@@ -159,7 +192,6 @@ const ItemTabsRodalLi = ({ name_rodal, idrodal, rodal }) => {
 
         const months_data = getMonthByRodales(rodales_select);
 
-
     }
 
 
@@ -168,7 +200,7 @@ const ItemTabsRodalLi = ({ name_rodal, idrodal, rodal }) => {
 
         //evaluo si es active o no
 
-
+       
         //antes de insertar en el itemselected consulto que no estekkl
         let exist = false;
         itemsSelected.forEach(element => {
@@ -209,7 +241,14 @@ const ItemTabsRodalLi = ({ name_rodal, idrodal, rodal }) => {
             await processQuery(object_);
             setIsLoadingTcostos(true);
 
+           //hago click en el rodal y tengo que quitar los actives de los years
+           //setYearsSelected([]);
+            setYearsSelected([]);
 
+
+
+         
+            
 
 
 
@@ -233,7 +272,7 @@ const ItemTabsRodalLi = ({ name_rodal, idrodal, rodal }) => {
     const processQuery = async (items_selected) => {
 
 
-        const metadata = await getMetadataFunction(items_selected);
+        const metadata = await getMetadataFunction(items_selected, [], []);
 
 
         if(metadata != false){
@@ -247,6 +286,9 @@ const ItemTabsRodalLi = ({ name_rodal, idrodal, rodal }) => {
                 setNumberData(metadata.cantidad)
                 setPages(metadata.pages);
                 setDataCostos(dataCostos_);
+                setDataCostosDinamic(dataCostos_);
+
+                //deberia procesar los materiales
         
             }
 

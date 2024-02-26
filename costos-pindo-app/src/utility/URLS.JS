@@ -15,6 +15,11 @@ export const URLS = {
 
     GET_YEARS_BY_IDRODAL: url_api + 'getYearsByIdRodal',
     GET_MONTHS_BY_IDRODAL: url_api + 'getMonthsByRodales',
+    GET_MONTHS_BY_YEARS: url_api + 'getMonthsByYears',
     GET_DATA_COSTOS_COMPLETO: url_api + 'getDataCostosCompleto',
+
+    GET_MATERIALES: url_api + 'getMateriales'
+
+
 
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import YearItem from './YearItem';
-import { ItemsGlobalContext, QueryGlobalContext } from '../../context/GlobalContext';
+import { ItemsGlobalContext, QueryGlobalContext, SelectedQueryGlobalContext } from '../../context/GlobalContext';
 
 const YearsListContainer = ({years_data}) => {
 
@@ -14,12 +14,16 @@ const YearsListContainer = ({years_data}) => {
 
 
 
+
+
     const [reloadYears, setReloadYears] = useState(false);
 
         //si hay rodales seleccionados, tengo que dejar activo el buton para que se pueda
         //hacer consultas con sl year
     
     const [hasRodalesSelect, setHasRodalesSelect] = useState(false);
+
+    const [isActive, setIsActive] = useState(false);
 
 
 
@@ -36,6 +40,7 @@ const YearsListContainer = ({years_data}) => {
         let items_ = [];
 
         years_data.forEach((year, index) => {
+
 
             //Recorro los year para verificar si esta presente o no
             let is_present = false;

@@ -74,13 +74,15 @@ const MonthListContainer = () => {
             let is_present = false;
             monthsPresent.forEach(mes => {
 
+        
+
                 //compruebo la existencia y los agrego
                 if (mes == element.number_month) {
                     is_present = true;
                 } 
             });
 
-    
+           
             it_.push(<MonthItem text_month={element.text_month} 
                 number_month={element.number_month} key={index} isPresent={is_present}></MonthItem>);
 
@@ -93,10 +95,9 @@ const MonthListContainer = () => {
 
 
     useEffect(() => {
-
+        setItems(null);
         createItems();
-
-        //console.log('se reinicia months container');
+        console.log(monthsPresent);
 
     }, [isMonthPresent]);
 

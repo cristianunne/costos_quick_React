@@ -20,6 +20,13 @@ export {QueryGlobalContext};
 
 const GlobalDataContext = React.createContext({ pages: 0, setPages: () => {}, numberData: 0, 
 setNumberData : () => {}, dataCostos: [], setDataCostos: () => {}, 
-isLoadingTcostos: false, setIsLoadingTcostos: () => {}, currentPageCostos: 1, setCurrentPageCostos: () => {}
+isLoadingTcostos: false, setIsLoadingTcostos: () => {}, currentPageCostos: 1, setCurrentPageCostos: () => {},
+materiales: [], setMateriales: () => {},  dataCostosDinamic: [], setDataCostosDinamic: () => {}
 });
 export {GlobalDataContext};
+
+const SelectedQueryGlobalContext = React.createContext({ queryRodales: false, setQueryRodales: () => {}, 
+    queryYears: false, setQueryYears: () => {}, queryMonth: false, setQueryMonth: () => {}, 
+    queryMateriales: false, setQueryMateriales: () => {} });
+
+export {SelectedQueryGlobalContext};

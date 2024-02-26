@@ -5,15 +5,16 @@ import '../../styles/TabLeftContainer/TabLeftContainer.css'
 
 import ItemTabs from './ItemTabs'
 import { ICONOS } from '../../Iconos'
-import { getEmpresasAPI, getRodalesWithEmpresasAPI } from '../../utility/Querys'
+import { getEmpresasAPI, getMaterialesAPI, getRodalesWithEmpresasAPI } from '../../utility/Querys'
 
 import SearchInput from '../search/SearchInput'
 import ItemsBoxRodalesContainer from './ItemsBoxRodalesContainer'
 import ItemsBoxEmpresasContainer from './ItemsBoxEmpresasContainer'
 
-import { GlobalContext, ItemsGlobalContext } from '../../context/GlobalContext'
+import { GlobalContext, GlobalDataContext, ItemsGlobalContext } from '../../context/GlobalContext'
 import ItemsSelectedTOC from './ItemsSelectedTOC'
 import TabLeftPlaceHolder from '../placeholders/TabLeftPlaceHolder'
+import ItemsBoxMaterialesContainer from './ItemsBoxMaterialesContainer'
 
 
 
@@ -28,6 +29,9 @@ const TabLeftContainer = () => {
   const [empresas, setEmpresas] = useState([]);
   const [empresasDinamic, setEmpresasDinamic] = useState([]);
 
+
+  const [materialesDinamic, setMaterialesDinamic] = useState([]);
+
   const [statusRodales, setStatusRodales] = useState(false);
   const [statusEmpresas, setStatusEmpresas] = useState(false);
   const [busqueda, setBusqueda] = useState();
@@ -38,6 +42,13 @@ const TabLeftContainer = () => {
   const { rodalReload, setRodalReload, reloadEmpresa, setReloadEmpresa } = useContext(GlobalContext);
 
   const { itemsSelected, setItemsSelected } = useContext(ItemsGlobalContext);
+
+  const { pages, setPages,
+    numberData, setNumberData,
+    dataCostos, setDataCostos, isLoadingTcostos, setIsLoadingTcostos,
+    currentPageAux, setCurrentPageAux,  materiales, setMateriales } = useContext(GlobalDataContext);
+
+
 
 
 
@@ -66,6 +77,21 @@ const TabLeftContainer = () => {
         setStatusEmpresas(true);
       }
 
+      //traigo los materiales
+      const materiales_data = await getMaterialesAPI();
+
+      
+
+      if(materiales_data){
+        setMateriales(materiales_data);
+        setMaterialesDinamic(materiales_data);
+        
+      }
+
+      //console.log(materiales_data);
+
+      
+
 
       if (rodalReload) {
         setRodalReload(false);
@@ -91,6 +117,8 @@ const TabLeftContainer = () => {
       } else {
         setReloadTab(true);
       }
+
+    
 
       //una vez ue me reseulve el rodal recargo las empresas
 
@@ -160,6 +188,18 @@ const TabLeftContainer = () => {
 
   }
 
+  const onChangeBuscarMateriales = (event) => {
+
+    let text_busqueda = event.target.value;
+
+    if (text_busqueda != undefined) {
+
+      setBusqueda(text_busqueda);
+      filter(text_busqueda, 3);
+    }
+
+  }
+
   const filter = (textBusqueda, option) => {
 
     if (option == 1) {
@@ -192,9 +232,25 @@ const TabLeftContainer = () => {
       setEmpresas(resultadoFiltro);
       setReloadEmpresa(!reloadEmpresa);
 
+    } else if (option == 3) {
+      
+      //maktx
+     
+      let resultadoFiltro = materialesDinamic.filter((elemento) => {
+      
+          if(elemento.maktg != null){
+            if (elemento.maktg.toString().toLowerCase().includes(textBusqueda.toLowerCase())) {
+              return elemento;
+            }
+
+          }
+
+      });
+
+      setMateriales(resultadoFiltro);
+      
+
     }
-
-
 
   }
 
@@ -244,7 +300,7 @@ const TabLeftContainer = () => {
 
       <div className="col-12 tab-content-container">
       <div className="tab-content">
-          <div className="tab-pane bg-dark active show" id="tabs-rodales-ex1">
+          <div className="tab-pane bg-dark active show scrollbar-color" id="tabs-rodales-ex1">
 
             {// Agreggo el search aca 
             }
@@ -278,7 +334,7 @@ const TabLeftContainer = () => {
 
             <div className='items-list-item'>
 
-              <div className="list-group list-group-flush bg-dark" id='rodales_items'>
+              <div className="list-group list-group-flush bg-dark scrollbar-color" id='rodales_items'>
 
                 <ItemsBoxEmpresasContainer empresas={empresas} status={statusEmpresas}
                   rodales={rodales}
@@ -302,12 +358,16 @@ const TabLeftContainer = () => {
           <div className="tab-pane bg-dark" id="tabs-materiales">
 
 
-          <SearchInput onChangeBuscar={null}></SearchInput>
+          <SearchInput onChangeBuscar={onChangeBuscarMateriales}></SearchInput>
           <div className="hr-text unset-margin mb-4">Materiales</div>
 
           <div className='items-list-item'>
 
-            <div className="list-group list-group-flush bg-dark" id='rodales_items'>
+            <div className="list-group list-group-flush bg-dark scrollbar-color" id='rodales_items'>
+
+              <ItemsBoxMaterialesContainer materiales={materiales}>
+
+              </ItemsBoxMaterialesContainer>
 
              
             </div>

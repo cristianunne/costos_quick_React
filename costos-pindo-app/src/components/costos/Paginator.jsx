@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import Pagination from 'react-bootstrap/Pagination';
 import PageItem from 'react-bootstrap/PageItem'
 import { getDataCostosFunction } from '../QuerysFunctions';
-import { GlobalDataContext, ItemsGlobalContext } from '../../context/GlobalContext';
+import { GlobalDataContext, ItemsGlobalContext, QueryGlobalContext, SelectedQueryGlobalContext } from '../../context/GlobalContext';
 
 
 
@@ -14,8 +14,24 @@ const Paginator = ({reloadTable, setReloadTable}) => {
 
     const { pages, setPages,
             numberData, setNumberData,
-            dataCostos, setDataCostos, isLoadingTcostos, setIsLoadingTcostos, 
+            dataCostos, setDataCostos, 
+            dataCostosDinamic, setDataCostosDinamic,
+            isLoadingTcostos, setIsLoadingTcostos, 
             currentPageCostos, setCurrentPageCostos } = useContext(GlobalDataContext);
+
+
+    const { queryRodales, setQueryRodales,
+                queryYears, setQueryYears,
+                queryMonth, setQueryMonth,
+                queryMateriales, setQueryMateriales} = useContext(SelectedQueryGlobalContext);
+
+    
+    const { yearsSelected, setYearsSelected, yearsPresent, setYearsPresent,
+                    isYearPresent, setIsYearPresent, yearsOfRodalesFilter, setYearsOfRodalesFilter,
+                    monthsSelected, setMonthSelected, monthsPresent, setMonthsPresent,
+                    isMonthPresent, setIsMonthPresent } = useContext(QueryGlobalContext);
+
+
 
     //creoun estado para manejar laposision del widget pgae actual
     const [currentPageWidget, setCurrentPageWidget] = useState(1);
@@ -32,7 +48,7 @@ const Paginator = ({reloadTable, setReloadTable}) => {
 
         let page_ = parseInt(page.target.text);
 
-     
+        
 
         setCurrentPageCostos(page_);
 
@@ -42,15 +58,25 @@ const Paginator = ({reloadTable, setReloadTable}) => {
 
      
         //Traigo los datos y reconstruyo las tablas
-        const dataCostos_ = await getDataCostosFunction(itemsSelected, [], [], page_);
+        //tengo que verificar como hace e query, porque no siempre habra items seleccionado
+        //puedo grabar una variable gobal que indique por donde entreo e query
 
+        if(queryYears){
+                const dataCostos_ = await getDataCostosFunction([], yearsSelected, [], page_);
+                setDataCostos(dataCostos_);
+                setDataCostosDinamic(dataCostos_);
+                
+        } else {
 
-        setDataCostos(dataCostos_);
+            //aca proceso cuando viene de rodales selects
+
+        }
+        
+    
+       
         setIsLoadingTcostos(true);
 
     
-
-       
     }
 
     const onClickPrevious = () => {
@@ -75,11 +101,15 @@ const Paginator = ({reloadTable, setReloadTable}) => {
 
     const onClickNext = () => {
 
+       
+
         //tengo que aumentar una pagina
         if((currentPageWidget + 1) <= numberPageWidget){
 
+
             let res_ = currentPageWidget + 1;
             setCurrentPageWidget(res_);
+           
         }
 
         

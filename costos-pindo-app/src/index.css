@@ -139,11 +139,15 @@ body::-webkit-scrollbar-thumb {
 }
 
 #rodales_items::-webkit-scrollbar-track {
-  background: #182433;        /* color of the tracking area */
+  background: #3055ac;        /* color of the tracking area */
 }
 
 #rodales_items::-webkit-scrollbar-thumb {
   background-color: #3055ac;    /* color of the scroll thumb */
   border-radius: 4px;       /* roundness of the scroll thumb */
   border: 1px solid #3055ac;  /* creates padding around scroll thumb */
+}
+
+.scrollbar-color{ 
+  scrollbar-color: #4263eb transparent;
 }

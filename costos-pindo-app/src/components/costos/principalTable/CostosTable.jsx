@@ -2,45 +2,70 @@ import React, { useContext, useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table';
 import { GlobalDataContext } from '../../../context/GlobalContext';
 
+    /**
+ * Number.prototype.format(n, x)
+ * 
+ * @param integer n: length of decimal
+ * @param integer x: length of sections
+ */
+    Number.prototype.format = function (n, x) {
+        var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+        return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+    };
 
 
-const CostosTable = ({reloadTable, setReloadTable}) => {
+const CostosTable = ({ reloadTable, setReloadTable }) => {
+
 
 
     const { pages, setPages,
         numberData, setNumberData,
-        dataCostos, setDataCostos, isLoadingTcostos, setIsLoadingTcostos, 
+        dataCostos, setDataCostos, isLoadingTcostos, setIsLoadingTcostos,
         currentPageCostos, setCurrentPageCostos } = useContext(GlobalDataContext);
 
     const [items, setItems] = useState([]);
-    
-    const number_paginas = 10000;
+
+    const number_paginas = 5;
 
     const createItems = () => {
 
         let items_ = [];
         dataCostos.forEach((element, index) => {
 
-            items_.push(<tr key={index}>   
-                                <td>{currentPageCostos == 1 ? index + 1 : 
-                                index + ((currentPageCostos * number_paginas) - number_paginas) + 1}</td>
-                                <td>{element.budat}</td>
-                                <td>{element.kstar}</td>
-                                <td>{element.idempresa}</td>
+            let imputado = parseFloat(element.dmbtr).format(2)
+            let unidad = parseFloat(element.mbgbtr).format(2)
+            let res = parseFloat(element.mbgbtr) != 0 ? (parseFloat(element.dmbtr) / parseFloat(element.mbgbtr)) : null
+            let val_unidad = res != null ? res.format(2) : null;
 
-                                <td>Mark</td>
-                                <td>{element.rodal}</td>
-                                <td>{element.maktx}</td>
 
-                                <td>{element.cuentacontable}</td>
-                                <td>{element.dmbtr}</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
+            let year = element.budat.toString().substr(0, 4);
+            let mes = element.budat.toString().substr(4, 2);
+            let dia = element.budat.toString().substr(6, 2);
 
-                                <td>{element.bltxt}</td>
-                                <td>{element.name}</td>
-                        </tr>);
-            
+
+            let fecha = new Date();
+
+            items_.push(<tr key={index}>
+                <td>{currentPageCostos == 1 ? index + 1 :
+                    index + ((currentPageCostos * number_paginas) - number_paginas) + 1}</td>
+                <td className='text-center nowrap'>{dia + '-' + mes + '-' + year}</td>
+                <td className='text-center'>{element.mesfinanciero}</td>
+                <td className='text-center'>{element.kstar}</td>
+                <td className='text-center'>{element.idempresa}</td>
+
+                <td className='text-center'>centro costo</td>
+                <td className='text-center'>{element.rodal}</td>
+                <td className='text-start'>{element.maktx}</td>
+
+                <td className='text-center'>{element.cuentacontable}</td>
+                <td className='text-end'>{imputado}</td>
+                <td className='text-end'>{unidad}</td>
+                <td className='text-end'>{val_unidad}</td>
+
+                <td className='text-center'>{element.bltxt}</td>
+                <td className='text-start'>{element.name}</td>
+            </tr>);
+
         });
 
         setItems(items_);
@@ -50,7 +75,7 @@ const CostosTable = ({reloadTable, setReloadTable}) => {
 
     useEffect(() => {
         createItems();
-        console.log('recargo las tablas');
+        //console.log('recargo las tablas');
     }, [dataCostos]);
 
 
@@ -60,6 +85,7 @@ const CostosTable = ({reloadTable, setReloadTable}) => {
                 <tr>
                     <th className="dt-center text-center">#</th>
                     <th className="dt-center text-center">Fecha</th>
+                    <th className="dt-center text-center">Mes Financiero</th>
                     <th className="dt-center text-center">Kstar</th>
                     <th className="dt-center text-center">ID Empresa</th>
 
@@ -79,7 +105,7 @@ const CostosTable = ({reloadTable, setReloadTable}) => {
 
             <tbody>
                 {items}
-               
+
             </tbody>
 
 

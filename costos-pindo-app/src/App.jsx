@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import Empresas from './components/Empresas';
 import TabLeftContainer from './components/tab-left-container/TabLeftContainer';
 
-import { GlobalContext, GlobalDataContext, ItemsGlobalContext, QueryGlobalContext } from './context/GlobalContext';
+import { GlobalContext, GlobalDataContext, ItemsGlobalContext, QueryGlobalContext, SelectedQueryGlobalContext } from './context/GlobalContext';
 
 import '../src/styles/DateHeader/dateheader.css'
 import '../src/styles/CostosContainer/CostosContainer.css'
@@ -48,8 +48,20 @@ function App() {
    const [pages, setPages] = useState(0);
    const [numberData, setNumberData] = useState(0);
    const [dataCostos, setDataCostos] = useState([]);
+   const [dataCostosDinamic, setDataCostosDinamic] = useState([]);
+
    const [isLoadingTcostos, setIsLoadingTcostos] = useState(false);
    const [currentPageCostos, setCurrentPageCostos] = useState(1);
+
+   const [materiales, setMateriales] = useState([]);
+
+   //creo los estados de los querys globales
+   const [ queryRodales, setQueryRodales] = useState(false);
+   const [ queryYears, setQueryYears] = useState(false);
+   const [ queryMonth, setQueryMonth] = useState(false);
+   const [ queryMateriales, setQueryMateriales] = useState(false);
+
+
 
    const getYears = async () => {
 
@@ -96,9 +108,18 @@ function App() {
 
                   <GlobalDataContext.Provider value={{pages, setPages, 
                   numberData, setNumberData, 
-                  dataCostos, setDataCostos, 
+                  dataCostos, setDataCostos,
+                  dataCostosDinamic, setDataCostosDinamic, 
                   isLoadingTcostos, setIsLoadingTcostos, 
-                  currentPageCostos, setCurrentPageCostos}}>
+                  currentPageCostos, setCurrentPageCostos, 
+                  materiales, setMateriales}}>
+
+                     <SelectedQueryGlobalContext.Provider value={{
+                        queryRodales, setQueryRodales,
+                        queryYears, setQueryYears,
+                        queryMonth, setQueryMonth,
+                        queryMateriales, setQueryMateriales
+                     }}>
 
                   <div className="container" id="container">
 
@@ -131,7 +152,7 @@ function App() {
 
                      </div>
                   </div>
-
+                  </SelectedQueryGlobalContext.Provider>
                   </GlobalDataContext.Provider>
 
 

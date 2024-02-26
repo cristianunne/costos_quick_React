@@ -5,15 +5,15 @@
 
 import { getDataCostosCompletoAPI, getMetadataForQueryDataAPI } from "../utility/Querys";
 
-export const getMetadataFunction = async (itemsSelected) => {
+export const getMetadataFunction = async (itemsSelected, yearsSelected, monthsSelected) => {
 
 
     let filter_data = {};
 
     filter_data['rodales'] = getRodalesFromItems(itemsSelected);
     //mando vacio years y months
-    filter_data['years'] = [];
-    filter_data['months'] = [];
+    filter_data['years'] = yearsSelected;
+    filter_data['months'] = monthsSelected;
 
     const dataMetadataFromAPI = getMetadataForQueryDataAPI(filter_data);
 

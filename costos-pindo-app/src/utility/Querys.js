@@ -175,6 +175,7 @@ export const getDataByYearsAPI = async (filter) => {
     headers.append('Access-Control-Allow-Origin', '*');
 
     let data = { 'years' : filter }
+    console.log(data);
 
 
     const rawResponse = await fetch(URLS.GET_DATA_BY_YEARS, {
@@ -259,12 +260,39 @@ export const getMonthsOfRodalesDataAPI = async (rodales) => {
 }
 
 
+export const getMonthsByYearsAPI = async (years) => {
+    
+    let headers = new Headers();
+  
+    headers.append('Accept', 'application/json'); // This one is enough for GET requests
+    headers.append('Content-Type', 'application/json'); // This one sends body
+    headers.append('Access-Control-Allow-Origin', '*');
 
+    let data = { 'years' : years }
+
+
+    const rawResponse = await fetch(URLS.GET_MONTHS_BY_YEARS, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(data)
+    });
+
+    try {
+        const content = rawResponse.json();
+        //console.log(content);
+
+        //user = content;
+        return content;
+    } catch (err) {
+        console.log(err);
+        return false;
+    }
+
+}
 
 export const getMetadataForQueryDataAPI = async (filter) => {
 
     let headers = new Headers();
-    console.log(filter);
 
 
     headers.append('Accept', 'application/json'); // This one is enough for GET requests
@@ -297,7 +325,6 @@ export const getMetadataForQueryDataAPI = async (filter) => {
 export const getDataCostosCompletoAPI = async (filter) => {
 
     let headers = new Headers();
-    console.log(filter);
 
 
     headers.append('Accept', 'application/json'); // This one is enough for GET requests
@@ -311,6 +338,38 @@ export const getDataCostosCompletoAPI = async (filter) => {
         method: 'POST',
         headers: headers,
         body: JSON.stringify(data)
+    });
+
+    try {
+        const content = rawResponse.json();
+        //console.log(content);
+
+        //user = content;
+        return content;
+    } catch (err) {
+        console.log(err);
+        return false;
+    }
+
+}
+
+export const getMaterialesAPI = async () => {
+
+    let headers = new Headers();
+
+
+    headers.append('Accept', 'application/json'); // This one is enough for GET requests
+    headers.append('Content-Type', 'application/json'); // This one sends body
+    //headers.append('Access-Control-Allow-Origin', '*');
+    //headers.append('X-CSRF-Token', csrf);
+
+    //let data = { idcampaign: idcampaign, camion_origen: camion_origen }
+
+
+    const rawResponse = await fetch(URLS.GET_MATERIALES, {
+        method: 'GET',
+        headers: headers
+        //body: JSON.stringify(data)
     });
 
     try {

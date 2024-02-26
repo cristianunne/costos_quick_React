@@ -38,3 +38,7 @@ table thead th, .table thead th{
     color: #121a26;
     border: #b3b3b3 solid 0.1px;
 }
+
+.nowrap{
+    white-space: nowrap;
+}
