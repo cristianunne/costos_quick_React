@@ -34,7 +34,7 @@ const CostosTableContainer = () => {
             {!isLoadingTcostos ? <TableCostosPlaceholder></TableCostosPlaceholder> :
 
                 <Card className='card-costos-container mb-5'>
-                    <Card.Header><h2>Gastos por Movimientos de Materiales</h2></Card.Header>
+                    <Card.Header><h3 className='text-blue'>Gastos por Movimientos de Materiales</h3></Card.Header>
                     <Card.Body className='card-body-costos-container'>
                         <CostosTable reloadTable={reloadTable} setReloadTable={setReloadTable}></CostosTable>
                     </Card.Body>

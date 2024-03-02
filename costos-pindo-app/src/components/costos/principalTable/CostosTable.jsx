@@ -25,7 +25,7 @@ const CostosTable = ({ reloadTable, setReloadTable }) => {
 
     const [items, setItems] = useState([]);
 
-    const number_paginas = 5;
+    const number_paginas = 10000;
 
     const createItems = () => {
 
@@ -46,24 +46,24 @@ const CostosTable = ({ reloadTable, setReloadTable }) => {
             let fecha = new Date();
 
             items_.push(<tr key={index}>
-                <td>{currentPageCostos == 1 ? index + 1 :
+                <td className='fw-bold align-middle'>{currentPageCostos == 1 ? index + 1 :
                     index + ((currentPageCostos * number_paginas) - number_paginas) + 1}</td>
-                <td className='text-center nowrap'>{dia + '-' + mes + '-' + year}</td>
-                <td className='text-center'>{element.mesfinanciero}</td>
-                <td className='text-center'>{element.kstar}</td>
-                <td className='text-center'>{element.idempresa}</td>
+                <td className='text-center align-middle nowrap'>{dia + '-' + mes + '-' + year}</td>
+                <td className='text-center align-middle'>{element.mesfinanciero}</td>
+                <td className='text-center align-middle'>{element.kstar}</td>
+                <td className='text-center align-middle'>{element.idempresa}</td>
 
-                <td className='text-center'>centro costo</td>
-                <td className='text-center'>{element.rodal}</td>
-                <td className='text-start'>{element.maktx}</td>
+                <td className='text-center align-middle'>centro costo</td>
+                <td className='text-center align-middle'>{element.rodal}</td>
+                <td className='text-start align-middle'>{element.maktx}</td>
 
-                <td className='text-center'>{element.cuentacontable}</td>
-                <td className='text-end'>{imputado}</td>
-                <td className='text-end'>{unidad}</td>
-                <td className='text-end'>{val_unidad}</td>
+                <td className='text-center align-middle'>{element.cuentacontable}</td>
+                <td className='text-end align-middle'>{imputado}</td>
+                <td className='text-end align-middle'>{unidad}</td>
+                <td className='text-end align-middle'>{val_unidad}</td>
 
-                <td className='text-center'>{element.bltxt}</td>
-                <td className='text-start'>{element.name}</td>
+                <td className='text-center align-middle'>{element.bltxt}</td>
+                <td className='text-start align-middle'>{element.name}</td>
             </tr>);
 
         });
@@ -80,7 +80,7 @@ const CostosTable = ({ reloadTable, setReloadTable }) => {
 
 
     return (
-        <Table striped bordered hover>
+        <Table striped bordered hover id='tabla-costos'>
             <thead className="sticky-top top-0">
                 <tr>
                     <th className="dt-center text-center">#</th>

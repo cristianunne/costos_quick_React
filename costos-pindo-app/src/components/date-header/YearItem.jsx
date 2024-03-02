@@ -1,7 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { GlobalDataContext, ItemsGlobalContext, QueryGlobalContext, SelectedQueryGlobalContext } from '../../context/GlobalContext';
 import { getDataByYearsAPI, getMonthsByYearsAPI, getMonthsOfRodalesDataAPI } from '../../utility/Querys';
-import { getDataCostosFunction, getMetadataFunction } from '../QuerysFunctions';
+import { getDataCostosFunction, getMaterialesByQueryFunction, getMetadataFunction, getResumenCostosFunction } from '../QuerysFunctions';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 const YearItem = ({ year, isPresent, has_rodales_select}) => {
 
@@ -15,17 +20,25 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
             queryMateriales, setQueryMateriales} = useContext(SelectedQueryGlobalContext);
 
 
-    const { yearsSelected, setYearsSelected, yearsPresent, setYearsPresent,
-            isYearPresent, setIsYearPresent, yearsOfRodalesFilter, setYearsOfRodalesFilter,
-            monthsSelected, setMonthSelected, monthsPresent, setMonthsPresent,
-            isMonthPresent, setIsMonthPresent } = useContext(QueryGlobalContext);
+        const { yearsSelected, setYearsSelected, yearsPresent, setYearsPresent,
+                isYearPresent, setIsYearPresent, yearsOfRodalesFilter, setYearsOfRodalesFilter,
+                monthsSelected, setMonthSelected, monthsPresent, setMonthsPresent,
+                isMonthPresent, setIsMonthPresent,
+                materialesSelected, setMaterialesSelected } = useContext(QueryGlobalContext);
 
-    const { pages, setPages,
+            const { pages, setPages,
                 numberData, setNumberData,
-                dataCostos, setDataCostos, 
+                dataCostos, setDataCostos,
                 dataCostosDinamic, setDataCostosDinamic,
                 isLoadingTcostos, setIsLoadingTcostos,
-                currentPageAux, setCurrentPageAux } = useContext(GlobalDataContext);
+                currentPageCostos, setCurrentPageCostos,
+                materiales, setMateriales,
+                resumenCostos, setResumenCostos,
+                reloadResumenCostos, setReloadResumenCostos,
+                isLoadingResumenCostos, setIsLoadingResumenCostos,
+                materialesCurrent, setMaterialesCurrent, 
+                materialesReload, setMaterialesReload, 
+                statusMateriales, setStatusMateriales } = useContext(GlobalDataContext);
 
 
 
@@ -179,8 +192,21 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
        
         if (!active) {
 
-         
-          
+            toast.success('El Año ha sido incuido del Filtro!', {
+                position: "bottom-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            }); 
+
+            //tengo que limpiar los materiales selected y quizas los meses
+            setMaterialesSelected([]);
+            setMonthSelected([]);
+
             //consulto por los items sellected
             if (itemsSelected.length > 0) {
 
@@ -191,8 +217,35 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
 
                 //cuando selecciono esto, hago el query
                 setIsLoadingTcostos(false);
+                setIsLoadingResumenCostos(false);
+                setStatusMateriales(false);
+
                 await processQuery(itemsSelected, years_obj);
                 setIsLoadingTcostos(true);
+
+                 //traigo los resumenes de costos
+                const res_costo = await getResumenCostosFunction(itemsSelected, years_obj, [], []);
+                //se lo paso al resumen
+            
+                setResumenCostos(res_costo);
+                setReloadResumenCostos(!reloadResumenCostos);
+                setIsLoadingResumenCostos(true);
+
+
+                   //proceso tmb los materiales presentes
+                const materiales_present = await getMaterialesByQueryFunction(itemsSelected, years_obj, []);
+
+
+                setMaterialesCurrent(materiales_present);
+                setMaterialesReload(!materialesReload);
+   
+                setStatusMateriales(true);
+
+                //tengo que revisar el tema de los meses
+                 //traigo los meses
+                 getMonthByYears(years_obj, true);
+
+                 //tengo que actualizar la tabla de costos resumen
 
 
             } else {
@@ -200,16 +253,30 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
                 //creo una variable global para que puedan acceder los years
 
                 //el tema es que la cantidad de datos puede ser enorme, por eso, tengo que traer paginado
-               
+             
                 addYearSelect(year);
                 let years_obj = convertToObject(year);
 
                 //tengo que traer los meses presentes
 
                 setIsLoadingTcostos(false);
+                setIsLoadingResumenCostos(false);
+                setStatusMateriales(false);
+
+
+
                 await processQuery([], years_obj);
                 setIsLoadingTcostos(true);
 
+                //tengo que actualizar la tabla de costos resumen
+
+                 //traigo los resumenes de costos
+                 const res_costo = await getResumenCostosFunction([], years_obj, [],[]);
+                 //se lo paso al resumen
+             
+                 setResumenCostos(res_costo);
+                 setReloadResumenCostos(!reloadResumenCostos);
+                 setIsLoadingResumenCostos(true);
 
                 //getDataByYears(years_obj);
 
@@ -221,14 +288,36 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
                     setQueryYears(true);
 
                 }
+              
 
-               
-               
+                 //proceso tmb los materiales presentes
+                const materiales_present = await getMaterialesByQueryFunction([], years_obj, []);
+
+
+                setMaterialesCurrent(materiales_present);
+                setMaterialesReload(!materialesReload);
+
+                setStatusMateriales(true);
 
             }
 
+        //else que evalua cunado esta activo el boton
         } else {
-           
+
+            toast.error('El Año ha sido quitado del Filtro!', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+
+            setMaterialesSelected([]);
+            setMonthSelected([]);
+
             //como esta activo, quito la seleccion.
             let new_years = removeYearSelect(year);
 
@@ -240,30 +329,160 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
 
             const arrFromObj = Object.keys(years_obj);
 
-            if(arrFromObj > 0){
-                  //cuando selecciono esto, hago el query
-                setIsLoadingTcostos(false);
-                await processQuery(itemsSelected, years_obj);
-                setIsLoadingTcostos(true);
+            //aca deberia revisar si estoy haciendo desde rodales selected o no
+            if(itemsSelected.length > 0){
 
-            } else {
-                setIsLoadingTcostos(false);
-                setNumberData(0)
-                setPages(0);
-                setDataCostos([]);
-                setDataCostosDinamic([]);
+                //si los years selected es 0, entonces restaurosiguiendo los rodales
+                if(arrFromObj.length <= 0){
+
+
+                    //hago la consulta solo con los rodales
+                    setIsLoadingTcostos(false);
+                    setIsLoadingResumenCostos(false);
+                    setStatusMateriales(false);
+
+
+                    await processQuery(itemsSelected, []);
+                    setIsLoadingTcostos(true);
+
+                     //traigo los resumenes de costos
+                    const res_costo = await getResumenCostosFunction(itemsSelected, [], [], []);
+                     //se lo paso al resumen
+                 
+                    setResumenCostos(res_costo);
+                    setReloadResumenCostos(!reloadResumenCostos);
+                  
+
+                    let years_obj_ = convertToObjectItems(yearsPresent);
+
+                    //tengo que traer nuevamente
+
+                    const materiales_present = await getMaterialesByQueryFunction(itemsSelected, [], []);
+
+                    setMaterialesCurrent(materiales_present);
+                    setMaterialesReload(!materialesReload);
+
+                    setStatusMateriales(true);
+                    setIsLoadingResumenCostos(true);
+
+
+
+                    //verifico que los years no esten vaciosregistros
+                    getMonthByYears(years_obj_, true);
+
+                      //tengo que actualizar la tabla de costos resumen
+
+                } else {
+
+                    //proceso con rodales activos y years activos
+                    //habia years selected
+                    //hago la consulta solo con los rodales
+                    setIsLoadingTcostos(false);
+                    setIsLoadingResumenCostos(false);
+                    setStatusMateriales(false);
+
+                    await processQuery(itemsSelected, []);
+                    setIsLoadingTcostos(true);
+                    
+               
+                    //traigo los resumenes de costos
+                    const res_costo = await getResumenCostosFunction(itemsSelected, years_obj, [], []);
+                    //se lo paso al resumen
+
+                    setResumenCostos(res_costo);
+                    setReloadResumenCostos(!reloadResumenCostos);
+                    setIsLoadingResumenCostos(true);
+
+
+                    const materiales_present = await getMaterialesByQueryFunction(itemsSelected, years_obj, []);
+
+
+                    setMaterialesCurrent(materiales_present);
+                    setMaterialesReload(!materialesReload);
+
+                    setStatusMateriales(true);
+
+
+                    getMonthByYears(years_obj, true);
+
+                    
+                    
+                    //tengo que actualizar la tabla de costos resumen
+
+                     //proceso tmb los materiales presentes
+                  
+                }
+
  
+            } else {
+
+
+                if(arrFromObj.length > 0){
+                    //cuando selecciono esto, hago el query
+                  
+                    setIsLoadingTcostos(false);
+                    setIsLoadingResumenCostos(false);
+
+                    setStatusMateriales(false);
+
+                    await processQuery([], years_obj);
+                    setIsLoadingTcostos(true);
+
+                    //traigo los resumenes de costos
+                    const res_costo = await getResumenCostosFunction([], years_obj, [], []);
+                    //se lo paso al resumen
+                
+                    setResumenCostos(res_costo);
+                    setReloadResumenCostos(!reloadResumenCostos);
+                    setIsLoadingResumenCostos(true);
+
+
+
+                    const materiales_present = await getMaterialesByQueryFunction([], years_obj, []);
+
+
+                    setMaterialesCurrent(materiales_present);
+                    setMaterialesReload(!materialesReload);
+
+                    setStatusMateriales(true);
+
+
+
+                } else {
+                   
+                    setIsLoadingTcostos(false);
+                    setStatusMateriales(false);
+
+                    setNumberData(0)
+                    setPages(0);
+                    setDataCostos([]);
+                    setDataCostosDinamic([]);
+
+                    setIsLoadingResumenCostos(false);
+                    setResumenCostos([]);
+                    setReloadResumenCostos(!reloadResumenCostos);
+
+
+                    setMaterialesCurrent([]);
+                    setMaterialesReload(!materialesReload);
+
+                    setStatusMateriales(true);
+                    setQueryYears(false);
+                
+    
+                }
+
+
+            
+                //tengo que limpiar tmb los meses
+
+                //traigo los meses
+                //getMonthByYears(years_obj);
+
+                getMonthByYears(years_obj, true);
+
             }
 
-
-          
-            //tengo que limpiar tmb los meses
-
-             //traigo los meses
-             //getMonthByYears(years_obj);
-
-             getMonthByYears(years_obj, true);
-          
 
         }
 
@@ -275,12 +494,11 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
     const processQuery = async (rodalesSelected, yearsSelected) => {
 
 
-        const metadata = await getMetadataFunction(rodalesSelected, yearsSelected, []);
-        
-        
+        const metadata = await getMetadataFunction(rodalesSelected, yearsSelected, [], []);
+
         if(metadata != false){
             //traigo los costos con la primer pagina
-            const dataCostos_ = await getDataCostosFunction(rodalesSelected, yearsSelected, [], 1);
+            const dataCostos_ = await getDataCostosFunction(rodalesSelected, yearsSelected, [], [], 1);
 
             if(dataCostos_ != false){
                 //console.log(dataCostos_);
@@ -384,6 +602,6 @@ export default YearItem
 const styles = {
     active: {
         backgroundColor: '#206bc4',
-        'color': '#e3e3e3'
+        color: '#e3e3e3'
     }
 };

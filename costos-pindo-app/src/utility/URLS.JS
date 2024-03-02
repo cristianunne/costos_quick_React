@@ -18,7 +18,11 @@ export const URLS = {
     GET_MONTHS_BY_YEARS: url_api + 'getMonthsByYears',
     GET_DATA_COSTOS_COMPLETO: url_api + 'getDataCostosCompleto',
 
-    GET_MATERIALES: url_api + 'getMateriales'
+    GET_MATERIALES: url_api + 'getMateriales',
+
+    GET_RESUMEN_COSTOS: url_api + 'getResumenCostos',
+
+    GET_MATERIALES_BY_QUERY: url_api + 'getMaterialesByQuery'
 
 
 

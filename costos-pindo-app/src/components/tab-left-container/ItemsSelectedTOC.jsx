@@ -41,7 +41,6 @@ const ItemsSelectedTOC = ({ empresas, reloadToc }) => {
     useEffect(() => {
 
         createItemsAcordion();
-        console.log('Refresh item Selected TOC');
         
     }, [reloadSelected])
 

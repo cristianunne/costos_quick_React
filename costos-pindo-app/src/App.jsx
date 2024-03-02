@@ -15,6 +15,9 @@ import { getYearsAPI } from './utility/Querys';
 import HeadersYearsPlaceholder from './components/placeholders/HeadersYearsPlaceholder';
 import MonthListContainer from './components/month-header/MonthListContainer';
 import CostosTableContainer from './components/costos/CostosTableContainer';
+import ResumenMain from './components/costos/Resumen/ResumenMain';
+
+import YearsResumenGraphContainer from './components/costos/GraphContainer/YearsResumenGraphContainer';
 
 
 
@@ -39,6 +42,8 @@ function App() {
    const [isMonthPresent, setIsMonthPresent] = useState([]);
 
    const [empresasSelected, setEmpresasSelected] = useState([]);
+   const [materialesSelected, setMaterialesSelected] = useState([]);
+
 
    const [yearsData, setYearsData] = useState([]);
    const [yearsState, setYearsState] = useState(false);
@@ -49,6 +54,14 @@ function App() {
    const [numberData, setNumberData] = useState(0);
    const [dataCostos, setDataCostos] = useState([]);
    const [dataCostosDinamic, setDataCostosDinamic] = useState([]);
+   const [resumenCostos, setResumenCostos] = useState([]);
+   const [reloadResumenCostos, setReloadResumenCostos] = useState(false);
+   const [isLoadingResumenCostos, setIsLoadingResumenCostos] = useState(false);
+
+   const [materialesCurrent, setMaterialesCurrent] = useState([]);
+   const [materialesReload, setMaterialesReload] = useState(false);
+   const [statusMateriales, setStatusMateriales] = useState(false);
+
 
    const [isLoadingTcostos, setIsLoadingTcostos] = useState(false);
    const [currentPageCostos, setCurrentPageCostos] = useState(1);
@@ -103,7 +116,8 @@ function App() {
                   isYearPresent, setIsYearPresent,
                   monthsSelected, setMonthSelected,
                   monthsPresent, setMonthsPresent,
-                  isMonthPresent, setIsMonthPresent
+                  isMonthPresent, setIsMonthPresent,
+                  materialesSelected, setMaterialesSelected
                }}>
 
                   <GlobalDataContext.Provider value={{pages, setPages, 
@@ -112,7 +126,13 @@ function App() {
                   dataCostosDinamic, setDataCostosDinamic, 
                   isLoadingTcostos, setIsLoadingTcostos, 
                   currentPageCostos, setCurrentPageCostos, 
-                  materiales, setMateriales}}>
+                  materiales, setMateriales, 
+                  resumenCostos, setResumenCostos, 
+                  reloadResumenCostos, setReloadResumenCostos, 
+                  isLoadingResumenCostos, setIsLoadingResumenCostos, 
+                  materialesCurrent, setMaterialesCurrent, 
+                  materialesReload, setMaterialesReload, 
+                  statusMateriales, setStatusMateriales}}>
 
                      <SelectedQueryGlobalContext.Provider value={{
                         queryRodales, setQueryRodales,
@@ -140,6 +160,27 @@ function App() {
                            </div>
 
                            <div className="row" id='costos-container'>
+                              <div className="col-lg-12 mb-5">
+                                <div className="row">
+                                    <div className="col-lg-8">
+                                       <div className="col-12">
+                                          <div className="card">
+                                             <div className="card-body">
+                                                <div id="chart-tasks-overview">
+                                                  
+                                                  <YearsResumenGraphContainer></YearsResumenGraphContainer>
+
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div className="col-lg-4">
+                                       <ResumenMain></ResumenMain>
+                                    </div>
+                                </div>
+                              </div>
+
                               <div className="col-lg-12">
                                  <CostosTableContainer></CostosTableContainer>
                               </div>
@@ -164,6 +205,8 @@ function App() {
       
 
          <ToastContainer />
+
+         
 
       </div>
    )

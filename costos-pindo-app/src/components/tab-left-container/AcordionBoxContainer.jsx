@@ -19,6 +19,7 @@ const AcordionBoxContainer = ({ cod_emp, name_empresa, rodal, reload }) => {
 
         
             if(element.idempresa == cod_emp){
+
                 items_.push(<ItemAcordionSelected name_rodal={element.rodal} item={element} key={index}></ItemAcordionSelected>);
             }
 

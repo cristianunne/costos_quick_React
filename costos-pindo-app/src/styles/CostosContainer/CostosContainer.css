@@ -23,20 +23,15 @@ table > tbody > tr > td{
     font-size: 0.8rem;
 }
 
-#card-footer-costos{
-    
-
-}
-
 #pagination-costos{
     max-width: 80%;
     overflow-x: auto;
 }
 
-table thead th, .table thead th{
-    background-color: rgb(233 233 233);
-    color: #121a26;
-    border: #b3b3b3 solid 0.1px;
+#tabla-costos thead th, #tabla-costos thead th{
+    background-color: #4299e1;
+    color: #ffffff;
+    border: #90b5e2 solid 0.1px;
 }
 
 .nowrap{

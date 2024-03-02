@@ -1,10 +1,11 @@
 import React, { useContext } from 'react'
 import TrashIcon from '../../icons/TrashIcon'
-import { ItemsGlobalContext, QueryGlobalContext } from '../../context/GlobalContext';
+import { GlobalDataContext, ItemsGlobalContext, QueryGlobalContext } from '../../context/GlobalContext';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getMonthsOfRodalesDataAPI, getYearsOfRodalesDataAPI } from '../../utility/Querys';
+import { getDataCostosFunction, getMaterialesByQueryFunction, getMetadataFunction, getResumenCostosFunction } from '../QuerysFunctions';
 
 const ItemAcordionSelected = ({ name_rodal, item }) => {
 
@@ -16,10 +17,24 @@ const ItemAcordionSelected = ({ name_rodal, item }) => {
             monthsSelected, setMonthSelected, monthsPresent, setMonthsPresent,
             isMonthPresent, setIsMonthPresent } = useContext(QueryGlobalContext);
 
+    const { pages, setPages,
+                numberData, setNumberData,
+                dataCostos, setDataCostos,
+                dataCostosDinamic, setDataCostosDinamic,
+                isLoadingTcostos, setIsLoadingTcostos,
+                currentPageCostos, setCurrentPageCostos,
+                materiales, setMateriales,
+                resumenCostos, setResumenCostos,
+                reloadResumenCostos, setReloadResumenCostos,
+                isLoadingResumenCostos, setIsLoadingResumenCostos,
+                materialesCurrent, setMaterialesCurrent, 
+                materialesReload, setMaterialesReload, 
+                statusMateriales, setStatusMateriales } = useContext(GlobalDataContext);
 
 
 
-    const onClickHandler = () => {
+
+    const onClickHandler = async () => {
 
 
 
@@ -78,6 +93,73 @@ const ItemAcordionSelected = ({ name_rodal, item }) => {
 
             //elimino los meses involucrados en el rodal
 
+            setYearsSelected([]);
+            setMonthSelected([]);
+
+            //Tengo que actualizar los COSTOS
+
+            //si tengo 0 objetos debo limpiar todo
+
+            if(items_.length > 0){
+
+                //proceso las consultas
+                setIsLoadingTcostos(false);
+                setIsLoadingResumenCostos(false);
+                setStatusMateriales(false);
+                await processQuery(items_);
+                setIsLoadingTcostos(true);
+
+
+                //traigo los resumenes de costos
+                const res_costo = await getResumenCostosFunction(items_, [], []);
+
+                setResumenCostos(res_costo);
+                setReloadResumenCostos(!reloadResumenCostos);
+                setIsLoadingResumenCostos(true);
+
+                   //proceso tmb los materiales presentes
+                const materiales_present = await getMaterialesByQueryFunction(items_, [], []);
+
+
+                setMaterialesCurrent(materiales_present);
+                setMaterialesReload(!materialesReload);
+
+                setStatusMateriales(true);
+
+
+
+
+                //tengo que actualizar la lista demateriales items_
+
+            } else {
+   
+                setIsLoadingTcostos(false);
+                setIsLoadingResumenCostos(false);
+
+                
+
+                setNumberData(null);
+                setPages(null);
+                setDataCostos([]);
+                setDataCostosDinamic([]);
+
+                setResumenCostos([]);
+                setReloadResumenCostos(!reloadResumenCostos);
+
+                
+
+                
+                setMaterialesCurrent([]);
+                setMaterialesReload(!materialesReload);
+         
+
+                
+
+            }
+
+
+            
+            
 
 
 
@@ -93,6 +175,34 @@ const ItemAcordionSelected = ({ name_rodal, item }) => {
                 progress: undefined,
                 theme: "colored",
             });
+        }
+
+    }
+
+
+    const processQuery = async (items_selected) => {
+
+
+        const metadata = await getMetadataFunction(items_selected, [], []);
+
+
+        if(metadata != false){
+            //traigo los costos con la primer pagina
+            const dataCostos_ = await getDataCostosFunction(items_selected, [], [], 1);
+
+            if(dataCostos_ != false){
+                //console.log(dataCostos_);
+    
+                //seteo el numero de paginas y de 
+                setNumberData(metadata.cantidad)
+                setPages(metadata.pages);
+                setDataCostos(dataCostos_);
+                setDataCostosDinamic(dataCostos_);
+
+                //deberia procesar los materiales
+        
+            }
+
         }
 
     }

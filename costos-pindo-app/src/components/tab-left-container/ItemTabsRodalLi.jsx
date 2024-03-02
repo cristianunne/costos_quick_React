@@ -4,8 +4,8 @@ import RodalesIcon from '../../icons/RodalesIcon';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getMetadataForQueryDataAPI, getMonthsOfRodalesDataAPI, getYearsOfRodalesDataAPI } from '../../utility/Querys';
-import { getDataCostosFunction, getMetadataFunction } from '../QuerysFunctions';
+import { getMetadataForQueryDataAPI, getMonthsOfRodalesDataAPI, getResumenCostosAPI, getYearsOfRodalesDataAPI } from '../../utility/Querys';
+import { getDataCostosFunction, getMaterialesByQueryFunction, getMetadataFunction, getResumenCostosFunction } from '../QuerysFunctions';
 
 const ItemTabsRodalLi = ({ name_rodal, idrodal, rodal }) => {
 
@@ -25,12 +25,21 @@ const ItemTabsRodalLi = ({ name_rodal, idrodal, rodal }) => {
         monthsSelected, setMonthSelected, monthsPresent, setMonthsPresent,
         isMonthPresent, setIsMonthPresent } = useContext(QueryGlobalContext);
 
-    const { pages, setPages,
+        const { pages, setPages,
             numberData, setNumberData,
-            dataCostos, setDataCostos, 
+            dataCostos, setDataCostos,
             dataCostosDinamic, setDataCostosDinamic,
             isLoadingTcostos, setIsLoadingTcostos,
-            currentPageAux, setCurrentPageAux } = useContext(GlobalDataContext);
+            currentPageCostos, setCurrentPageCostos,
+            materiales, setMateriales,
+            resumenCostos, setResumenCostos,
+            reloadResumenCostos, setReloadResumenCostos,
+            isLoadingResumenCostos, setIsLoadingResumenCostos,
+            materialesCurrent, setMaterialesCurrent, 
+            materialesReload, setMaterialesReload, 
+            statusMateriales, setStatusMateriales } = useContext(GlobalDataContext);
+
+            //materiales current guarda los materiales de la consulta actual
 
     
     const { queryRodales, setQueryRodales,
@@ -214,6 +223,8 @@ const ItemTabsRodalLi = ({ name_rodal, idrodal, rodal }) => {
         if (!exist) {
             object_ = [...itemsSelected, rodal]
 
+           
+
             insertInEmpresasSelected(rodal.idempresa);
             setItemsSelected(object_);
 
@@ -230,7 +241,7 @@ const ItemTabsRodalLi = ({ name_rodal, idrodal, rodal }) => {
                 draggable: true,
                 progress: undefined,
                 theme: "colored",
-            });
+            }); 
            //recargo el rodalREload
          
             setReloadSelected(!reloadSelected);
@@ -238,19 +249,41 @@ const ItemTabsRodalLi = ({ name_rodal, idrodal, rodal }) => {
             
             //proceso las consultas
             setIsLoadingTcostos(false);
+            setIsLoadingResumenCostos(false);
+            setStatusMateriales(false);
             await processQuery(object_);
             setIsLoadingTcostos(true);
+
+
+            //traigo los resumenes de costos
+            //el resumen tmb deberia filtrar los materiales
+            const res_costo = await getResumenCostosFunction(object_, [], [], []);
+
+
+          
+               //proceso tmb los materiales presentes
+            const materiales_present = await getMaterialesByQueryFunction(object_, [], []);
+
+
+            setMaterialesCurrent(materiales_present);
+            setMaterialesReload(!materialesReload);
+
+            setStatusMateriales(true);
+            //se lo paso al resumen
+          
+            setResumenCostos(res_costo);
+            setReloadResumenCostos(!reloadResumenCostos);
+            setIsLoadingResumenCostos(true);
+
 
            //hago click en el rodal y tengo que quitar los actives de los years
            //setYearsSelected([]);
             setYearsSelected([]);
 
+            setMonthSelected([]);
 
-
-         
-            
-
-
+            setQueryYears(false);
+            setQueryRodales(true);
 
         } else {
             //mando el mensaje
@@ -272,12 +305,13 @@ const ItemTabsRodalLi = ({ name_rodal, idrodal, rodal }) => {
     const processQuery = async (items_selected) => {
 
 
-        const metadata = await getMetadataFunction(items_selected, [], []);
+        const metadata = await getMetadataFunction(items_selected, [], [], []);
 
 
         if(metadata != false){
             //traigo los costos con la primer pagina
-            const dataCostos_ = await getDataCostosFunction(items_selected, [], [], 1);
+            const dataCostos_ = await getDataCostosFunction(items_selected, [], [], [], 1);
+        
 
             if(dataCostos_ != false){
                 //console.log(dataCostos_);
@@ -297,13 +331,6 @@ const ItemTabsRodalLi = ({ name_rodal, idrodal, rodal }) => {
     }
 
 
-    const getMetadata = async (items_selected) => {
-        const dataMetadata = await getMetadataFunction(items_selected);
-       
-        return dataMetadata;
-    }
-
-
 
     const insertInEmpresasSelected = (idempresa) => {
 
@@ -320,6 +347,11 @@ const ItemTabsRodalLi = ({ name_rodal, idrodal, rodal }) => {
             empresasSelected.push(idempresa);
         }
     }
+
+
+    useEffect(() => {
+
+    }, [])
 
 
     return (

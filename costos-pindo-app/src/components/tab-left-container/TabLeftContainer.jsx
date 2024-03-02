@@ -43,10 +43,21 @@ const TabLeftContainer = () => {
 
   const { itemsSelected, setItemsSelected } = useContext(ItemsGlobalContext);
 
-  const { pages, setPages,
-    numberData, setNumberData,
-    dataCostos, setDataCostos, isLoadingTcostos, setIsLoadingTcostos,
-    currentPageAux, setCurrentPageAux,  materiales, setMateriales } = useContext(GlobalDataContext);
+
+
+    const { pages, setPages,
+      numberData, setNumberData,
+      dataCostos, setDataCostos,
+      dataCostosDinamic, setDataCostosDinamic,
+      isLoadingTcostos, setIsLoadingTcostos,
+      currentPageCostos, setCurrentPageCostos,
+      materiales, setMateriales,
+      resumenCostos, setResumenCostos,
+      reloadResumenCostos, setReloadResumenCostos,
+      isLoadingResumenCostos, setIsLoadingResumenCostos,
+      materialesCurrent, setMaterialesCurrent, 
+      materialesReload, setMaterialesReload, 
+      statusMateriales, setStatusMateriales } = useContext(GlobalDataContext);
 
 
 
@@ -77,6 +88,7 @@ const TabLeftContainer = () => {
         setStatusEmpresas(true);
       }
 
+      setStatusMateriales(false);
       //traigo los materiales
       const materiales_data = await getMaterialesAPI();
 
@@ -87,7 +99,7 @@ const TabLeftContainer = () => {
         setMaterialesDinamic(materiales_data);
         
       }
-
+      setStatusMateriales(true);
       //console.log(materiales_data);
 
       
@@ -240,6 +252,7 @@ const TabLeftContainer = () => {
       
           if(elemento.maktg != null){
             if (elemento.maktg.toString().toLowerCase().includes(textBusqueda.toLowerCase())) {
+           
               return elemento;
             }
 
@@ -359,15 +372,26 @@ const TabLeftContainer = () => {
 
 
           <SearchInput onChangeBuscar={onChangeBuscarMateriales}></SearchInput>
+
+          //Aca tendria que poner el boton de filtro presentes
+
+
           <div className="hr-text unset-margin mb-4">Materiales</div>
 
           <div className='items-list-item'>
 
             <div className="list-group list-group-flush bg-dark scrollbar-color" id='rodales_items'>
 
-              <ItemsBoxMaterialesContainer materiales={materiales}>
+            {statusMateriales ?
 
-              </ItemsBoxMaterialesContainer>
+                  <ItemsBoxMaterialesContainer materiales={materiales}>
+
+                  </ItemsBoxMaterialesContainer>
+
+              : <TabLeftPlaceHolder></TabLeftPlaceHolder>
+              }
+
+            
 
              
             </div>

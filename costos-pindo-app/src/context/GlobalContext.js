@@ -15,13 +15,18 @@ const QueryGlobalContext = React.createContext({yearsSelected: [], setYearsSelec
 yearsPresent: [], setYearsPresent: () =>{}, isYearPresent: false, setIsYearPresent: () => {}, 
 yearsOfRodalesFilter: [], setYearsOfRodalesFilter: () => {}, 
 monthsSelected: [], setMonthSelected: () => {}, monthsPresent: [], setMonthsPresent: () => {}, 
-isMonthPresent: false, setIsMonthPresent: () => {}});
+isMonthPresent: false, setIsMonthPresent: () => {}, 
+materialesSelected: [], setMaterialesSelected: () => {}});
 export {QueryGlobalContext};
 
 const GlobalDataContext = React.createContext({ pages: 0, setPages: () => {}, numberData: 0, 
 setNumberData : () => {}, dataCostos: [], setDataCostos: () => {}, 
 isLoadingTcostos: false, setIsLoadingTcostos: () => {}, currentPageCostos: 1, setCurrentPageCostos: () => {},
-materiales: [], setMateriales: () => {},  dataCostosDinamic: [], setDataCostosDinamic: () => {}
+materiales: [], setMateriales: () => {},  dataCostosDinamic: [], setDataCostosDinamic: () => {},
+resumenCostos: [], setResumenCostos: () => {}, reloadResumenCostos: false, setReloadResumenCostos: () => {},
+isLoadingResumenCostos: false, setIsLoadingResumenCostos: () => {},
+materialesCurrent: [], setMaterialesCurrent: () => {}, materialesReload: false, setMaterialesReload: () => {},
+statusMateriales: false, setStatusMateriales: () => {}
 });
 export {GlobalDataContext};
 

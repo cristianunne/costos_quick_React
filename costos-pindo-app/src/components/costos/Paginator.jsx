@@ -49,14 +49,8 @@ const Paginator = ({reloadTable, setReloadTable}) => {
         let page_ = parseInt(page.target.text);
 
         
-
         setCurrentPageCostos(page_);
 
-        /*setTimeout(()=> {
-            setIsLoadingTcostos(true);
-        }, 3000);*/
-
-     
         //Traigo los datos y reconstruyo las tablas
         //tengo que verificar como hace e query, porque no siempre habra items seleccionado
         //puedo grabar una variable gobal que indique por donde entreo e query
@@ -73,7 +67,7 @@ const Paginator = ({reloadTable, setReloadTable}) => {
         }
         
     
-       
+
         setIsLoadingTcostos(true);
 
     
@@ -102,7 +96,6 @@ const Paginator = ({reloadTable, setReloadTable}) => {
     const onClickNext = () => {
 
        
-
         //tengo que aumentar una pagina
         if((currentPageWidget + 1) <= numberPageWidget){
 
@@ -128,60 +121,60 @@ const Paginator = ({reloadTable, setReloadTable}) => {
 
     const createPages = () => {
 
+        if(pages > 0){
+            let pagesPaginator = null; //variable utilizada para saber cuantas paginas muestra en el widget
 
-        let pagesPaginator = null; //variable utilizada para saber cuantas paginas muestra en el widget
-
-        let mod_page_pag = pages % number_pages_show;
-
-
-        let number_pages_in_windget = mod_page_pag == 0 ? (pages / number_pages_show) : 
-                                        ((pages - mod_page_pag) / number_pages_show) + 1;
-
-        setNumberPageWidget(number_pages_in_windget);
+            let mod_page_pag = pages % number_pages_show;
 
 
-        //tengo que dividir esa cantidad de paginas en 30 por vista
-        
-        //tengo un currentPageCostos en el global, tengo que mapear el numero de pagina en el que estoy
+            let number_pages_in_windget = mod_page_pag == 0 ? (pages / number_pages_show) : 
+                                            ((pages - mod_page_pag) / number_pages_show) + 1;
+
+            setNumberPageWidget(number_pages_in_windget);
 
 
-
-        //para construir los limites tengo que delimitar el limite inferior y superior
-        //compruebo si estoy enla ultimapagia y asigno el limite superio en base al modulo
-
-        let lim_sup = currentPageWidget == number_pages_in_windget ? 
-        pages : (currentPageWidget * number_pages_show)
-
-        //let lim_sup = currentPageWidget * number_pages_show;
-        let lim_inf = 0;
-
-        if(currentPageWidget == number_pages_in_windget){
-
-            if(mod_page_pag == 0){
-                lim_inf = (lim_sup - number_pages_show) + 1;
-            } else {
-                lim_inf = (lim_sup - mod_page_pag) + 1;
-            }
-          
-        } else {
-            lim_inf = (lim_sup - number_pages_show) + 1;
-        }
-
-     
-
-        let items_ = [];
-
-        for (let index = lim_inf; index <= lim_sup; index++) {
-
-
-            items_.push(<PageItem key={index} active={index === currentPageCostos} onClick={onClickInPage}>
-                {index}
-            </PageItem>);
+            //tengo que dividir esa cantidad de paginas en 30 por vista
             
+            //tengo un currentPageCostos en el global, tengo que mapear el numero de pagina en el que estoy
+
+
+            //para construir los limites tengo que delimitar el limite inferior y superior
+            //compruebo si estoy enla ultimapagia y asigno el limite superio en base al modulo
+
+            let lim_sup = currentPageWidget == number_pages_in_windget ? 
+            pages : (currentPageWidget * number_pages_show)
+
+            //let lim_sup = currentPageWidget * number_pages_show;
+            let lim_inf = 0;
+
+            if(currentPageWidget == number_pages_in_windget){
+
+                if(mod_page_pag == 0){
+                    lim_inf = (lim_sup - number_pages_show) + 1;
+                } else {
+                    lim_inf = (lim_sup - mod_page_pag) + 1;
+                }
+            
+            } else {
+                lim_inf = (lim_sup - number_pages_show) + 1;
+            }
+
+        
+            let items_ = [];
+
+            for (let index = lim_inf; index <= lim_sup; index++) {
+
+
+                items_.push(<PageItem key={index} active={index === currentPageCostos} onClick={onClickInPage}>
+                    {index}
+                </PageItem>);
+                
+            }
+
+            setItems(items_);
+
         }
 
-
-        setItems(items_);
 
     }
 
@@ -190,8 +183,7 @@ const Paginator = ({reloadTable, setReloadTable}) => {
 
     useEffect(() => {
 
-        console.log('currentPageWidget ' + currentPageWidget);
-   
+       
         createPages();
         
         
