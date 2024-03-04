@@ -22,6 +22,8 @@ export const URLS = {
 
     GET_RESUMEN_COSTOS: url_api + 'getResumenCostos',
 
+    GET_RESUMEN_COSTOS_BY_YEARS: url_api + 'getResumenCostosByYears',
+
     GET_MATERIALES_BY_QUERY: url_api + 'getMaterialesByQuery'
 
 

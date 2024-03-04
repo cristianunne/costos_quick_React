@@ -55,7 +55,7 @@ const MonthItem = ({ text_month, number_month, isPresent, base_month }) => {
 
         if (!active) {
 
-            toast.success('El Mes ha sido incuido del Filtro!', {
+            toast.success(`El Mes de ${text_month} ha sido incuido del Filtro!`, {
                 position: "bottom-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -94,7 +94,7 @@ const MonthItem = ({ text_month, number_month, isPresent, base_month }) => {
             //restauro el filtro
             setActive(!active);
 
-            toast.error('El Mes ha sido quitado del Filtro!', {
+            toast.error(`El Mes de ${text_month} ha sido quitado del Filtro!`, {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,

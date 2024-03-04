@@ -192,7 +192,7 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
        
         if (!active) {
 
-            toast.success('El Año ha sido incuido del Filtro!', {
+            toast.success(`El Año ${year} ha sido incuido en el Filtro!`, {
                 position: "bottom-right",
                 autoClose: 3000,
                 hideProgressBar: false,
@@ -221,7 +221,7 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
                 setStatusMateriales(false);
 
                 await processQuery(itemsSelected, years_obj);
-                setIsLoadingTcostos(true);
+              
 
                  //traigo los resumenes de costos
                 const res_costo = await getResumenCostosFunction(itemsSelected, years_obj, [], []);
@@ -230,6 +230,7 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
                 setResumenCostos(res_costo);
                 setReloadResumenCostos(!reloadResumenCostos);
                 setIsLoadingResumenCostos(true);
+                setIsLoadingTcostos(true);
 
 
                    //proceso tmb los materiales presentes
@@ -266,7 +267,7 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
 
 
                 await processQuery([], years_obj);
-                setIsLoadingTcostos(true);
+               
 
                 //tengo que actualizar la tabla de costos resumen
 
@@ -277,6 +278,7 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
                  setResumenCostos(res_costo);
                  setReloadResumenCostos(!reloadResumenCostos);
                  setIsLoadingResumenCostos(true);
+                 setIsLoadingTcostos(true);
 
                 //getDataByYears(years_obj);
 
@@ -304,7 +306,7 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
         //else que evalua cunado esta activo el boton
         } else {
 
-            toast.error('El Año ha sido quitado del Filtro!', {
+            toast.error(`El Año ${year} ha sido quitado del Filtro!`, {
                 position: "bottom-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -343,7 +345,7 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
 
 
                     await processQuery(itemsSelected, []);
-                    setIsLoadingTcostos(true);
+                   
 
                      //traigo los resumenes de costos
                     const res_costo = await getResumenCostosFunction(itemsSelected, [], [], []);
@@ -351,6 +353,7 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
                  
                     setResumenCostos(res_costo);
                     setReloadResumenCostos(!reloadResumenCostos);
+                    setIsLoadingTcostos(true);
                   
 
                     let years_obj_ = convertToObjectItems(yearsPresent);
@@ -382,7 +385,7 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
                     setStatusMateriales(false);
 
                     await processQuery(itemsSelected, []);
-                    setIsLoadingTcostos(true);
+                   
                     
                
                     //traigo los resumenes de costos
@@ -392,6 +395,7 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
                     setResumenCostos(res_costo);
                     setReloadResumenCostos(!reloadResumenCostos);
                     setIsLoadingResumenCostos(true);
+                    setIsLoadingTcostos(true);
 
 
                     const materiales_present = await getMaterialesByQueryFunction(itemsSelected, years_obj, []);
@@ -426,7 +430,7 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
                     setStatusMateriales(false);
 
                     await processQuery([], years_obj);
-                    setIsLoadingTcostos(true);
+                  
 
                     //traigo los resumenes de costos
                     const res_costo = await getResumenCostosFunction([], years_obj, [], []);
@@ -435,7 +439,7 @@ const YearItem = ({ year, isPresent, has_rodales_select}) => {
                     setResumenCostos(res_costo);
                     setReloadResumenCostos(!reloadResumenCostos);
                     setIsLoadingResumenCostos(true);
-
+                    setIsLoadingTcostos(true);
 
 
                     const materiales_present = await getMaterialesByQueryFunction([], years_obj, []);

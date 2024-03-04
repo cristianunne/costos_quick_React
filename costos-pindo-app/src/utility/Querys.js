@@ -417,6 +417,36 @@ export const getResumenCostosAPI = async (filter) => {
 
 }
 
+export const getResumenCostosByYearsAPI = async () => {
+
+    let headers = new Headers();
+
+
+    headers.append('Accept', 'application/json'); // This one is enough for GET requests
+    headers.append('Content-Type', 'application/json'); // This one sends body
+    headers.append('Access-Control-Allow-Origin', '*');
+
+  
+
+
+    const rawResponse = await fetch(URLS.GET_RESUMEN_COSTOS_BY_YEARS, {
+        method: 'GET',
+        headers: headers,
+    });
+
+    try {
+        const content = rawResponse.json();
+        //console.log(content);
+
+        //user = content;
+        return content;
+    } catch (err) {
+        console.log(err);
+        return false;
+    }
+
+}
+
 export const getMaterialesByQueryAPI = async (filter) => {
 
     let headers = new Headers();
