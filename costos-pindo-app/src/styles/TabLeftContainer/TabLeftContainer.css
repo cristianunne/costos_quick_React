@@ -99,3 +99,16 @@
     padding-left: 8px;
     padding-right: 8px;
 }
+
+
+.map-show-link-container{
+    height: 50px;
+    border: solid 0.3px #4263eb;
+}
+#btn-view-map{
+    cursor: pointer;
+}
+
+#btn-view-map:hover{
+    background-color: #4263eb;
+}

@@ -16,7 +16,8 @@ import ItemsSelectedTOC from './ItemsSelectedTOC'
 import TabLeftPlaceHolder from '../placeholders/TabLeftPlaceHolder'
 import ItemsBoxMaterialesContainer from './ItemsBoxMaterialesContainer'
 
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const TabLeftContainer = () => {
 
@@ -41,7 +42,9 @@ const TabLeftContainer = () => {
 
   const { rodalReload, setRodalReload, reloadEmpresa, setReloadEmpresa } = useContext(GlobalContext);
 
-  const { itemsSelected, setItemsSelected } = useContext(ItemsGlobalContext);
+  
+  const { itemsSelected, setItemsSelected, reloadSelected, setReloadSelected, 
+    empresasSelected, setEmpresasSelected } = useContext(ItemsGlobalContext);
 
 
 
@@ -58,8 +61,6 @@ const TabLeftContainer = () => {
       materialesCurrent, setMaterialesCurrent, 
       materialesReload, setMaterialesReload, 
       statusMateriales, setStatusMateriales } = useContext(GlobalDataContext);
-
-
 
 
 
@@ -300,7 +301,7 @@ const TabLeftContainer = () => {
   return (
     <div className='container' id='sub-tableft-container'>
 
-      <div className="col-12 tab-nav-header">
+      <div className="col-12">
         <ul className='nav nav-tabs card-header-tabs tabs-header bg-dark'>
           <ItemTabs icono={ICONOS.RODALES} title={'Rodales'} url={'tabs-rodales-ex1'} active_status={true} />
           <ItemTabs icono={ICONOS.EMPRESAS} title={'Empresas'} url={'tabs-empresas-ex2'} active_status={false} />
@@ -312,96 +313,97 @@ const TabLeftContainer = () => {
       </div>
 
       <div className="col-12 tab-content-container">
-      <div className="tab-content">
-          <div className="tab-pane bg-dark active show scrollbar-color" id="tabs-rodales-ex1">
+        <div className="tab-content">
+            <div className="tab-pane bg-dark active show scrollbar-color" id="tabs-rodales-ex1">
 
-            {// Agreggo el search aca 
-            }
-            <SearchInput onChangeBuscar={onChangeBuscarRodales}></SearchInput>
-            <div className="hr-text unset-margin mb-4 bg-dark">Rodales</div>
+              {// Agreggo el search aca 
+              }
 
-            <div className='items-list-item bg-dark'>
+              <SearchInput onChangeBuscar={onChangeBuscarRodales}></SearchInput>
+              <div className="hr-text unset-margin mb-4 bg-dark">Rodales</div>
 
-              <div className="list-group list-group-flush bg-dark" id='rodales_items'>
+              <div className='items-list-item bg-dark'>
 
-                {statusRodales ?
+                <div className="list-group list-group-flush bg-dark" id='rodales_items'>
 
-                  <ItemsBoxRodalesContainer rodales={rodales} status={statusRodales}
-                  ></ItemsBoxRodalesContainer>
+                  {statusRodales ?
 
-                  : <TabLeftPlaceHolder></TabLeftPlaceHolder>
-                }
+                    <ItemsBoxRodalesContainer rodales={rodales} status={statusRodales}
+                    ></ItemsBoxRodalesContainer>
 
+                    : <TabLeftPlaceHolder></TabLeftPlaceHolder>
+                  }
+
+                </div>
               </div>
+              <div className="hr-text unset-margin mb-4"></div>
             </div>
-            <div className="hr-text unset-margin mb-4"></div>
-          </div>
 
-          <div className="tab-pane bg-dark" id="tabs-empresas-ex2">
+            <div className="tab-pane bg-dark" id="tabs-empresas-ex2">
 
-            {// Agreggo el search de empresas
-            }
+              {// Agreggo el search de empresas
+              }
 
-            <SearchInput onChangeBuscar={onChangeBuscarEmpresas}></SearchInput>
-            <div className="hr-text unset-margin mb-4">Empresas</div>
+              <SearchInput onChangeBuscar={onChangeBuscarEmpresas}></SearchInput>
+              <div className="hr-text unset-margin mb-4">Empresas</div>
+
+              <div className='items-list-item'>
+
+                <div className="list-group list-group-flush bg-dark scrollbar-color" id='rodales_items'>
+
+                  <ItemsBoxEmpresasContainer empresas={empresas} status={statusEmpresas}
+                    rodales={rodales}
+                    rodalesDinamic={rodalesDinamic}
+                    statusRodales={statusRodales}
+                    setRodales={setRodales}
+                    setRodalesActually={setRodalesActually}
+                  >
+
+                  </ItemsBoxEmpresasContainer>
+
+
+                </div>
+              </div>
+
+              <div className="hr-text unset-margin mb-5"></div>
+
+
+            </div>
+
+            <div className="tab-pane bg-dark" id="tabs-materiales">
+
+
+            <SearchInput onChangeBuscar={onChangeBuscarMateriales}></SearchInput>
+
+            //Aca tendria que poner el boton de filtro presentes
+
+
+            <div className="hr-text unset-margin mb-4">Materiales</div>
 
             <div className='items-list-item'>
 
               <div className="list-group list-group-flush bg-dark scrollbar-color" id='rodales_items'>
 
-                <ItemsBoxEmpresasContainer empresas={empresas} status={statusEmpresas}
-                  rodales={rodales}
-                  rodalesDinamic={rodalesDinamic}
-                  statusRodales={statusRodales}
-                  setRodales={setRodales}
-                  setRodalesActually={setRodalesActually}
-                >
+              {statusMateriales ?
 
-                </ItemsBoxEmpresasContainer>
+                    <ItemsBoxMaterialesContainer materiales={materiales}>
 
+                    </ItemsBoxMaterialesContainer>
 
+                : <TabLeftPlaceHolder></TabLeftPlaceHolder>
+                }
+
+              
+
+              
               </div>
             </div>
 
             <div className="hr-text unset-margin mb-5"></div>
 
 
-          </div>
-
-          <div className="tab-pane bg-dark" id="tabs-materiales">
-
-
-          <SearchInput onChangeBuscar={onChangeBuscarMateriales}></SearchInput>
-
-          //Aca tendria que poner el boton de filtro presentes
-
-
-          <div className="hr-text unset-margin mb-4">Materiales</div>
-
-          <div className='items-list-item'>
-
-            <div className="list-group list-group-flush bg-dark scrollbar-color" id='rodales_items'>
-
-            {statusMateriales ?
-
-                  <ItemsBoxMaterialesContainer materiales={materiales}>
-
-                  </ItemsBoxMaterialesContainer>
-
-              : <TabLeftPlaceHolder></TabLeftPlaceHolder>
-              }
-
-            
-
-             
             </div>
           </div>
-
-          <div className="hr-text unset-margin mb-5"></div>
-
-
-          </div>
-        </div>
  
 
       </div>

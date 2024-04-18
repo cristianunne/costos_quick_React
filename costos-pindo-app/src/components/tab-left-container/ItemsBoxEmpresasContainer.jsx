@@ -9,10 +9,6 @@ const ItemsBoxEmpresasContainer = ({ empresas, status, rodales, rodalesDinamic ,
 
     const [idEmpresa, setIdEmpresa] = useState();
 
-
-
-    
-
     const {rodalReload, setRodalReload, reloadEmpresa, setReloadEmpresa} = useContext(GlobalContext);
 
     const createItemsTabsEmpresas = (empresas) => {

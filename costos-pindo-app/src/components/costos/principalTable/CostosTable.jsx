@@ -25,7 +25,7 @@ const CostosTable = ({ reloadTable, setReloadTable }) => {
 
     const [items, setItems] = useState([]);
 
-    const number_paginas = 10000;
+    const number_paginas = 1000;
 
     const createItems = () => {
 
